@@ -95,7 +95,6 @@ class Fetcher {
                 data = Fetcher.parseString(response)
             })
             .catch(err => console.log(err))
-
         return data
     }
 
