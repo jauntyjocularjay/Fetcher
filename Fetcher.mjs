@@ -1,19 +1,3 @@
-// I forget why I did this this way
-// class Body {
-//     constructor(data){
-//         this.records = {};
-//         this.data = data;
-//     }
-// }
-
-/**
- * @class takes response string and parses it as JSON
- */
-class ParsedResponse {
-    constructor(response){
-        return JSON.parse(response)
-    }
-}
 
 // An enum to define types of responses
 class Method {
@@ -28,6 +12,15 @@ class Fetcher {
     constructor(){
         this.access_token = ''
         this.refresh_token = ''
+    }
+
+    static parseString(response){
+        const data = JSON.parse(response)
+        return data
+    }
+
+    static methods(){
+        return ['getData', 'postData', 'patchData', 'deleteData']
     }
 
     GET(){
@@ -48,7 +41,7 @@ class Fetcher {
         options.body = body
         await fetch(url, options)
             .then(response => {
-                data = new ParsedResponse(response)
+                data = Fetcher.parseString(response)
             })
             .catch(err => console.log(err))
 
@@ -73,7 +66,7 @@ class Fetcher {
         options.body = body
         await fetch(url, options)
             .then(response => {
-                data = new ParsedResponse(response)
+                data = Fetcher.parseString(response)
             })
             .catch(err => console.log(err))
 
@@ -98,7 +91,7 @@ class Fetcher {
         options.body = body
         await fetch(url, options)
             .then(response => {
-                data = new ParsedResponse(response)
+                data = Fetcher.parseString(response)
             })
             .catch(err => console.log(err))
 
@@ -123,7 +116,7 @@ class Fetcher {
         options.body = body
         await fetch(url, options)
             .then(response => {
-                data = new ParsedResponse(response)
+                data = Fetcher.parseString(response)
             })
             .catch(err => console.log(err))
 
@@ -132,8 +125,9 @@ class Fetcher {
 }
 
 export {
-    ParsedResponse,
-    Method,
-    Fetcher
+    Fetcher,
 }
+
+
+
 
