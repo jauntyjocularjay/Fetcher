@@ -26,7 +26,6 @@ class Fetcher {
 
     GET(){
         return {
-            body: {},
             credentials: 'same-origin',
             headers: {
                 Accept: 'application/json, text/plain, */*',
@@ -36,7 +35,7 @@ class Fetcher {
         }
     }
 
-    async getData(url, body={}){
+    async getData(url){
         var data
         const options = this.GET()
         options.body = body
