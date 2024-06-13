@@ -12,6 +12,7 @@ class Fetcher {
     constructor(){
         this.access_token = ''
         this.refresh_token = ''
+        this.base_url = ''
     }
 
     static parseString(response){
