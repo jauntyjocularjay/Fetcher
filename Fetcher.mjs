@@ -15,8 +15,8 @@ class Fetcher {
         this.base_url = ''
     }
 
-    static parseString(response){
-        const data = JSON.parse(response)
+    static async parseString(response){
+        const data = await response.json()
         return data
     }
 
@@ -35,16 +35,12 @@ class Fetcher {
         }
     }
 
-    async getData(url){
-        var data
+    async getData(endpoint){
+        const url = this.base_url + endpoint
         const options = this.GET()
-        options.body = body
-        await fetch(url, options)
-            .then(response => {
-                data = Fetcher.parseString(response)
-            })
+        const response = await fetch(url, options)
             .catch(err => console.log(err))
-
+        const data = await Fetcher.parseString(response)
         return data
     }
 
@@ -60,14 +56,16 @@ class Fetcher {
         }    
     }
 
-    async postData(url, body={}){
+    // test this
+    async postData(endpoint, body={}){
+    /**
+     * @todo test
+     */
         var data
+        const url = this.base_url + endpoint
         const options = this.POST()
         options.body = body
-        await fetch(url, options)
-            .then(response => {
-                data = Fetcher.parseString(response)
-            })
+        data = await fetch(url, options)
             .catch(err => console.log(err))
 
         return data
@@ -85,7 +83,11 @@ class Fetcher {
         }
     }
 
+    // test this
     async patchData(url, body={}){
+    /**
+     * @todo test
+     */
         var data
         const options = this.PATCH()
         options.body = body
@@ -109,7 +111,11 @@ class Fetcher {
         }
     }
 
+    // test this
     async deleteData(url, body={}){
+    /**
+     * @todo test
+     */
         var data
         const options = this.DELETE()
         options.body = body
@@ -124,7 +130,7 @@ class Fetcher {
 }
 
 export {
-    Fetcher,
+    Fetcher
 }
 
 

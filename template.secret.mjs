@@ -1,0 +1,6 @@
+class ENV {
+    oddsAPI = {
+        key: ''
+    }
+
+}
