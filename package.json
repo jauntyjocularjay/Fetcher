@@ -1,6 +1,33 @@
 {
   "dependencies": {
     "chai": "^5.1.1",
-    "mocha": "^10.4.0"
-  }
+    "mocha": "^10.4.0",
+    "stripe": "^15.11.0"
+  },
+  "name": "fetcher",
+  "description": "An ES6, fetch\u001b[D\u001b[D\u001b[D\u001b[F\u001b[C\u001b[C\u001b[C\u001b[C\u001b[Clibrary to ease the use of JSON apis\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D rest\u001b[C\u001b[C\u001b[C\u001b[D\u001b[D\u001b[D\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[D\u001b[D\u001b[D\u001b[D\u001b[DaA\u001b[D\u001b[DAPI\u001b[C\u001b[C",
+  "version": "0.1.0",
+  "main": "Fetcher.mjs",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha test --exit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jauntyjocularjay/fetcher.git"
+  },
+  "keywords": [
+    "fetch",
+    "json",
+    "es6"
+  ],
+  "author": "jauntyjocularjay",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jauntyjocularjay/fetcher/issues"
+  },
+  "homepage": "https://github.com/jauntyjocularjay/fetcher#readme"
 }
