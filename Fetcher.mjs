@@ -88,9 +88,6 @@ class Fetcher {
     }
 
     async postData(endpoint, body={}){
-    /**
-     * @todo test
-     */
         const url = this.base_url + endpoint
         const options = this.POST()
         options.body = body
