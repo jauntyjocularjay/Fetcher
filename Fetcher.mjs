@@ -61,12 +61,12 @@ class Fetcher {
     /**
      * @todo test
      */
-        var data
         const url = this.base_url + endpoint
         const options = this.POST()
         options.body = body
-        data = await fetch(url, options)
+        const response = await fetch(url, options)
             .catch(err => console.log(err))
+        const data = await Fetcher.parseString(response)
 
         return data
     }
@@ -84,18 +84,17 @@ class Fetcher {
     }
 
     // test this
-    async patchData(url, body={}){
+    async patchData(endpoint, body={}){
     /**
      * @todo test
      */
-        var data
+        const url = this.base_url + endpoint
         const options = this.PATCH()
         options.body = body
-        await fetch(url, options)
-            .then(response => {
-                data = Fetcher.parseString(response)
-            })
+        const response = await fetch(url, options)
             .catch(err => console.log(err))
+        const data = await Fetcher.parseString(response)
+
         return data
     }
 
@@ -112,18 +111,16 @@ class Fetcher {
     }
 
     // test this
-    async deleteData(url, body={}){
+    async deleteData(endpoint, body={}){
     /**
      * @todo test
      */
-        var data
+        const url = this.base_url + endpoint
         const options = this.DELETE()
         options.body = body
-        await fetch(url, options)
-            .then(response => {
-                data = Fetcher.parseString(response)
-            })
+        const response = await fetch(url, options)
             .catch(err => console.log(err))
+        const data = await Fetcher.parseString(response)
 
         return data
     }
