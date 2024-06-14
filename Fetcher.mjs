@@ -2,6 +2,7 @@
 // An enum to define types of responses
 class Method {
     static GET = 'GET'
+    static PUT = 'PUT'
     static POST = 'POST'
     static PATCH = 'PATCH'
     static DELETE = 'DELETE'
@@ -37,10 +38,40 @@ class Fetcher {
 
     async getData(endpoint){
         const url = this.base_url + endpoint
+        // console.log('getData url:', url) // for debugging
         const options = this.GET()
         const response = await fetch(url, options)
             .catch(err => console.log(err))
+        // console.log('getData response:', response) // for debugging
         const data = await Fetcher.parseString(response)
+        return data
+    }
+
+    PUT(){
+        return {
+            body: {}, 
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json, text/plain, */*',
+                Authorization: 'Bearer ' + this.access_token
+            },
+            method: Method.PUT
+        }    
+    }
+
+    // test this
+    async putData(endpoint, body={}){
+    /**
+     * @todo test
+     */
+        const url = this.base_url + endpoint
+        const options = this.PUT()
+        options.body = body
+        const response = await fetch(url, options)
+            .catch(err => console.log(err))
+        const data = await Fetcher.parseString(response)
+        data.status = response.status
+
         return data
     }
 
@@ -56,7 +87,6 @@ class Fetcher {
         }    
     }
 
-    // test this
     async postData(endpoint, body={}){
     /**
      * @todo test
@@ -67,6 +97,7 @@ class Fetcher {
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         const data = await Fetcher.parseString(response)
+        data.status = response.status
 
         return data
     }
@@ -83,7 +114,6 @@ class Fetcher {
         }
     }
 
-    // test this
     async patchData(endpoint, body={}){
     /**
      * @todo test
@@ -94,7 +124,8 @@ class Fetcher {
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         const data = await Fetcher.parseString(response)
-
+        data.status = response.status
+        // console.log('patchData data:', data)
         return data
     }
 
@@ -110,7 +141,6 @@ class Fetcher {
         }
     }
 
-    // test this
     async deleteData(endpoint, body={}){
     /**
      * @todo test
@@ -120,7 +150,10 @@ class Fetcher {
         options.body = body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
+        console.log('deleteData response:', response)
         const data = await Fetcher.parseString(response)
+        data.status = response.status
+
 
         return data
     }
