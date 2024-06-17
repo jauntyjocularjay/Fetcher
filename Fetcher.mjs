@@ -8,17 +8,26 @@ class Method {
     static DELETE = 'DELETE'
 }
 
+
+
 class Fetcher {
 
     constructor(){
-        this.access_token = ''
-        this.refresh_token = ''
         this.base_url = ''
     }
 
     static async parseString(response){
         const data = await response.json()
         return data
+    }
+
+    static parseURLParameters(parameters){
+        let result = ''
+        for(const [key, value] of Object.entries(parameters)){
+            result =+`&${key}=${value}`
+        }
+        result.charAt(0) = '?'
+        return result
     }
 
     static methods(){
@@ -29,8 +38,7 @@ class Fetcher {
         return {
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*',
-                Authorization: 'Bearer ' + this.access_token
+                Accept: 'application/json, text/plain, */*'
             },
             method: Method.GET
         }
@@ -38,11 +46,9 @@ class Fetcher {
 
     async getData(endpoint){
         const url = this.base_url + endpoint
-        // console.log('getData url:', url) // for debugging
         const options = this.GET()
         const response = await fetch(url, options)
             .catch(err => console.log(err))
-        // console.log('getData response:', response) // for debugging
         const data = await Fetcher.parseString(response)
         return data
     }
@@ -52,19 +58,18 @@ class Fetcher {
             body: {}, 
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*',
-                Authorization: 'Bearer ' + this.access_token
+                Accept: 'application/json, text/plain, */*'
             },
             method: Method.PUT
         }    
     }
 
     // test this
-    async putData(endpoint, body={}){
+    async putData(endpoint, body={}, parameters={}){
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(parameters)
         const options = this.PUT()
         options.body = body
         const response = await fetch(url, options)
@@ -80,15 +85,14 @@ class Fetcher {
             body: {}, 
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*',
-                Authorization: 'Bearer ' + this.access_token
+                Accept: 'application/json, text/plain, */*'
             },
             method: Method.POST
         }    
     }
 
     async postData(endpoint, body={}){
-        const url = this.base_url + endpoint
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(parameters)
         const options = this.POST()
         options.body = body
         const response = await fetch(url, options)
@@ -104,8 +108,7 @@ class Fetcher {
             body: {},
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*',
-                Authorization: 'Bearer ' + this.access_token
+                Accept: 'application/json, text/plain, */*'
             },
             method: Method.PATCH
         }
@@ -115,7 +118,7 @@ class Fetcher {
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(parameters)
         const options = this.PATCH()
         options.body = body
         const response = await fetch(url, options)
@@ -131,8 +134,7 @@ class Fetcher {
             body: {},
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*',
-                Authorization: 'Bearer ' + this.access_token
+                Accept: 'application/json, text/plain, */*'
             },
             method: Method.DELETE
         }
@@ -142,7 +144,7 @@ class Fetcher {
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(parameters)
         const options = this.DELETE()
         options.body = body
         const response = await fetch(url, options)
