@@ -91,7 +91,7 @@ class Fetcher {
         }    
     }
 
-    async postData(endpoint, body={}){
+    async postData(endpoint, body={}, parameters={}){
         const url = this.base_url + endpoint + Fetcher.parseURLParameters(parameters)
         const options = this.POST()
         options.body = body
@@ -114,7 +114,7 @@ class Fetcher {
         }
     }
 
-    async patchData(endpoint, body={}){
+    async patchData(endpoint, body={}, parameters={}){
     /**
      * @todo test
      */
@@ -140,7 +140,7 @@ class Fetcher {
         }
     }
 
-    async deleteData(endpoint, body={}){
+    async deleteData(endpoint, body={}, parameters={}){
     /**
      * @todo test
      */
