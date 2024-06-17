@@ -1,6 +1,7 @@
 import {
     Fetcher
 } from '../Fetcher.mjs'
+import { ENV } from '../secret.mjs'
 
 
 
@@ -8,40 +9,47 @@ class TrelloFetcher extends Fetcher {
     constructor(){
         super()
         this.base_url = 'https://api.trello.com'
-        this.APIKey = ENV.trelloAPI.key
-        this.APIToken = ENV.trelloAPI.token
-        this.suffix = `&key=${this.APIKey}&token=${this.APIToken}`
+        this.parameters = {
+            key: ENV.trello.key,
+            token: ENV.trello.token
+        }
     }
 
+    /*** @todo test */
     async getUserData(fields){
-        fields = `fields=${fields}`
-        const endpoint = `/1/members/me/boards?${fields}&${this.suffix}`
-        //                /1/members/me/boards?fields=name,url&key={apiKey}&token={apiToken}
-        return await this.getData(endpoint)
+        const params = this.parameters.create()
+        params.fields = fields
+        const endpoint = '/1/members/me/boards'
+        return await this.getData(endpoint, {parameters: params})
     }
 
+    /*** @todo test */
     async getBoard(boardID){
-        const endpoint = `/1/boards/${boardID}?${this.suffix}`
-        //                /1/boards/{id}?key=APIKey&token=APIToken
-        return await this.getData(endpoint)
+        const endpoint = `/1/boards/${boardID}`
+        return await this.getData(endpoint, {parameters: this.parameters})
     }
 
+    /*** @todo test */
     async createBoard(workspace, boardName){
-        boardName = `name=${boardName.toLowerCase()}`
-        workspace = `&idOrganization=${workspace.toLowerCase()}`
-        const endpoint = `/1/boards/?${boardName}${workspace}${this.suffix}`
+        const params = this.parameters.create()
+        params.name = boardName.toLowerCase()
+        params.idOrganization = workspace.toLowerCase()
+        const endpoint = '/1/boards/'
         return await this.postData(endpoint, null)
     }
 
+    /*** @todo test */
     async updateBoard(boardID, parameters){
-        const endpoint = `1/boards/{id}?${parameters}${this.suffix}`
-        return await this.putData(endpoint, null)
+        const params = this.parameters
+        const endpoint = `/1/boards/${boardID}`
+        return await this.putData(endpoint, {parameters: params})
     }
 
+    /*** @todo test */
     async deleteBoard(boardID){
-        boardID = `${boardID.toLowerCase()}`
-        const endpoint = `/1/boards/${boardID}?${this.suffix}`
-        return await this.deleteData(endpoint, null)
+        boardID = boardID.toLowerCase()
+        const endpoint = `/1/boards/${boardID}`
+        return await this.deleteData(endpoint, {parameters: this.parameters})
     }
 }
 

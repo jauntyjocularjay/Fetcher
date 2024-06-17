@@ -6,6 +6,11 @@ import {
 } from '../secret.mjs'
 
 class WeatherFetcher extends Fetcher {
+    static glossary = {
+        q: 'city,country',
+        dt: 'dateYYYY-MM-DD'
+    }
+
     constructor(){
         super('http://api.weatherapi.com/v1')
     }
@@ -17,7 +22,7 @@ class WeatherFetcher extends Fetcher {
      */
         const endpoint = `/history.json`
         const params = {
-            key: ENV.weather.apiKey,
+            key: ENV.weather.key,
             q: city, // City
             dt: date // Date
         }
