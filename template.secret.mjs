@@ -3,3 +3,5 @@ class ENV {
         key: ''
     }
 }
+
+export { ENV }

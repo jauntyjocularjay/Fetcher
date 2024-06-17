@@ -44,3 +44,5 @@ class TrelloFetcher extends Fetcher {
         return await this.deleteData(endpoint, null)
     }
 }
+
+export { TrelloFetcher }

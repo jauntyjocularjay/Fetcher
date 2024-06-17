@@ -12,8 +12,8 @@ class Method {
 
 class Fetcher {
 
-    constructor(){
-        this.base_url = ''
+    constructor(baseUrl){
+        this.base_url = baseUrl
     }
 
     static async parseString(response){
@@ -24,9 +24,9 @@ class Fetcher {
     static parseURLParameters(parameters){
         let result = ''
         for(const [key, value] of Object.entries(parameters)){
-            result =+`&${key}=${value}`
+            result +=`&${key}=${value}`
         }
-        result.charAt(0) = '?'
+        result = '?' + result.slice(1)
         return result
     }
 
@@ -161,7 +161,3 @@ class Fetcher {
 export {
     Fetcher
 }
-
-
-
-

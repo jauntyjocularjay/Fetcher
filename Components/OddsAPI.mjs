@@ -18,3 +18,4 @@ class OddsFetcher extends Fetcher {
 
 }
 
+export { OddsFetcher }
