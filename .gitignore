@@ -1,6 +1,7 @@
+
 node_modules/
+chaitests/
 git/
 
 .gitmodules
 secret.mjs
-

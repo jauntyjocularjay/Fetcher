@@ -10,10 +10,9 @@ class Method {
 
 class Fetcher {
 
-    constructor(){
-        this.access_token = ''
-        this.refresh_token = ''
-        this.base_url = ''
+    constructor(base_url='', parameters={}){
+        this.base_url = base_url
+        this.parameters = parameters
     }
 
     static async parseString(response){
@@ -21,52 +20,61 @@ class Fetcher {
         return data
     }
 
+    parameters(){
+        return Object.assign(this.parameters)
+    }
+
+    static parseURLParameters(parameters){
+        let result = ''
+        for(const [key, value] of Object.entries(parameters)){
+            result +=`&${key}=${value}`
+        }
+        result = '?' + result.slice(1)
+        return result
+    }
+
     static methods(){
         return ['getData', 'postData', 'patchData', 'deleteData']
     }
 
-    GET(){
+    getOptions(){
         return {
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*',
-                Authorization: 'Bearer ' + this.access_token
+                Accept: 'application/json, text/plain, */*'
             },
             method: Method.GET
         }
     }
 
-    async getData(endpoint){
-        const url = this.base_url + endpoint
-        // console.log('getData url:', url) // for debugging
-        const options = this.GET()
-        const response = await fetch(url, options)
+    async GET(endpoint, obj={parameters: {}}){
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
+        const response = await fetch(url, this.getOptions())
             .catch(err => console.log(err))
-        // console.log('getData response:', response) // for debugging
         const data = await Fetcher.parseString(response)
+        data.status = response.status
         return data
     }
 
-    PUT(){
+    putOptions(){
         return {
             body: {}, 
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*',
-                Authorization: 'Bearer ' + this.access_token
+                Accept: 'application/json, text/plain, */*'
             },
             method: Method.PUT
         }    
     }
 
     // test this
-    async putData(endpoint, body={}){
+    async PUT(endpoint, obj={body: {}, parameters: {}}){
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint
-        const options = this.PUT()
-        options.body = body
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
+        const options = this.putOptions()
+        options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         const data = await Fetcher.parseString(response)
@@ -75,22 +83,21 @@ class Fetcher {
         return data
     }
 
-    POST(){
+    postOptions(){
         return {
             body: {}, 
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*',
-                Authorization: 'Bearer ' + this.access_token
+                Accept: 'application/json, text/plain, */*'
             },
             method: Method.POST
         }    
     }
 
-    async postData(endpoint, body={}){
-        const url = this.base_url + endpoint
-        const options = this.POST()
-        options.body = body
+    async POST(endpoint, obj={body: {}, parameters: {}}){
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
+        const options = this.postOptions()
+        options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         const data = await Fetcher.parseString(response)
@@ -99,25 +106,24 @@ class Fetcher {
         return data
     }
 
-    PATCH(){
+    patchOptions(){
         return {
             body: {},
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*',
-                Authorization: 'Bearer ' + this.access_token
+                Accept: 'application/json, text/plain, */*'
             },
             method: Method.PATCH
         }
     }
 
-    async patchData(endpoint, body={}){
+    async PATCH(endpoint, obj={body: {}, parameters: {}}){
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint
-        const options = this.PATCH()
-        options.body = body
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
+        const options = this.patchOptions()
+        options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         const data = await Fetcher.parseString(response)
@@ -126,25 +132,24 @@ class Fetcher {
         return data
     }
 
-    DELETE(){
+    deleteOptions(){
         return {
             body: {},
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*',
-                Authorization: 'Bearer ' + this.access_token
+                Accept: 'application/json, text/plain, */*'
             },
             method: Method.DELETE
         }
     }
 
-    async deleteData(endpoint, body={}){
+    async DELETE(endpoint, obj={body: {}, parameters: {}}){
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint
-        const options = this.DELETE()
-        options.body = body
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
+        const options = this.deleteOptions()
+        options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         console.log('deleteData response:', response)
@@ -159,7 +164,3 @@ class Fetcher {
 export {
     Fetcher
 }
-
-
-
-

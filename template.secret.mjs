@@ -1,6 +1,7 @@
 class ENV {
-    oddsAPI = {
+    APINAME = {
         key: ''
     }
-
 }
+
+export { ENV }
