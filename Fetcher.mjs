@@ -1,7 +1,4 @@
 
-
-
-
 // An enum to define types of responses
 class Method {
     static GET = 'GET'
@@ -13,8 +10,8 @@ class Method {
 
 class Fetcher {
 
-    constructor(baseUrl='', parameters={}){
-        this.base_url = baseUrl
+    constructor(base_url='', parameters={}){
+        this.base_url = base_url
         this.parameters = parameters
     }
 

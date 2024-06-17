@@ -17,6 +17,20 @@ Each request method a pre-baked method in Fetcher that can be modified by overlo
 
 ## Using Fetcher
 
+### the Constructor
+
+```
+constructor(base_url, parameters)
+```
+
+The constructor takes the base_url and query parameters that will remain consistent across all requests. 
+
+### parameters method
+
+the `parameters()` method returns a copy of the parameter object from the constructor. 
+
+### Option methods
+
 You can create a fetcher specific to the API you will work with. Each method follows the following format: method(endpoint, obj={body: {}, parameters: {}}). The exception is the GET method.
 
 ```
@@ -34,10 +48,7 @@ DELETE(endpoint, obj={body: {}, URLParameters: {}})
 
 The data is returned with a status property appended for testing convenience. The body is the body payload. The URLParameters modifies the URL to include query parameters.
 
-
-
-
-
+### secret.mjs
 
 
 
@@ -51,14 +62,6 @@ use 'Fetcher'
 ```
 class ClassName extends Fetcher
 ```
-
-### the Constructor
-
-```
-constructor(base_url, parameters)
-```
-
-The constructor takes the base_url and query parameters that will remain consistent across all requests. 
 
 ### the Methods
 
