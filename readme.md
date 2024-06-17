@@ -17,6 +17,10 @@ Each request method a pre-baked method in Fetcher that can be modified by overlo
 
 ## Using Fetcher
 
+### template.secret.mjs
+
+This secrets file is included for convenience, although not sctrictly necessary. These are necessary for the components for the `OddsAPI`, `Trello`, and `WeatherAPI`. These are a work in progress and not ready for use.
+
 ### the Constructor
 
 ```
@@ -47,11 +51,6 @@ DELETE(endpoint, obj={body: {}, URLParameters: {}})
 ```
 
 The data is returned with a status property appended for testing convenience. The body is the body payload. The URLParameters modifies the URL to include query parameters.
-
-### secret.mjs
-
-
-
 
 ## Extending Fetcher
 
