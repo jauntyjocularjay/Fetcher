@@ -1,4 +1,7 @@
 
+
+
+
 // An enum to define types of responses
 class Method {
     static GET = 'GET'
@@ -8,17 +11,20 @@ class Method {
     static DELETE = 'DELETE'
 }
 
-
-
 class Fetcher {
 
-    constructor(baseUrl){
+    constructor(baseUrl='', parameters={}){
         this.base_url = baseUrl
+        this.parameters = parameters
     }
 
     static async parseString(response){
         const data = await response.json()
         return data
+    }
+
+    parameters(){
+        return Object.assign(this.parameters)
     }
 
     static parseURLParameters(parameters){
@@ -34,7 +40,7 @@ class Fetcher {
         return ['getData', 'postData', 'patchData', 'deleteData']
     }
 
-    GET(){
+    getOptions(){
         return {
             credentials: 'same-origin',
             headers: {
@@ -44,16 +50,16 @@ class Fetcher {
         }
     }
 
-    async getData(endpoint, obj={parameters: {}}){
+    async GET(endpoint, obj={parameters: {}}){
         const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
-        const options = this.GET()
-        const response = await fetch(url, options)
+        const response = await fetch(url, this.getOptions())
             .catch(err => console.log(err))
         const data = await Fetcher.parseString(response)
+        data.status = response.status
         return data
     }
 
-    PUT(){
+    putOptions(){
         return {
             body: {}, 
             credentials: 'same-origin',
@@ -65,12 +71,12 @@ class Fetcher {
     }
 
     // test this
-    async putData(endpoint, obj={body: {}, parameters: {}}){
+    async PUT(endpoint, obj={body: {}, parameters: {}}){
     /**
      * @todo test
      */
         const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
-        const options = this.PUT()
+        const options = this.putOptions()
         options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
@@ -80,7 +86,7 @@ class Fetcher {
         return data
     }
 
-    POST(){
+    postOptions(){
         return {
             body: {}, 
             credentials: 'same-origin',
@@ -91,9 +97,9 @@ class Fetcher {
         }    
     }
 
-    async postData(endpoint, obj={body: {}, parameters: {}}){
+    async POST(endpoint, obj={body: {}, parameters: {}}){
         const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
-        const options = this.POST()
+        const options = this.postOptions()
         options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
@@ -103,7 +109,7 @@ class Fetcher {
         return data
     }
 
-    PATCH(){
+    patchOptions(){
         return {
             body: {},
             credentials: 'same-origin',
@@ -114,12 +120,12 @@ class Fetcher {
         }
     }
 
-    async patchData(endpoint, obj={body: {}, parameters: {}}){
+    async PATCH(endpoint, obj={body: {}, parameters: {}}){
     /**
      * @todo test
      */
         const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
-        const options = this.PATCH()
+        const options = this.patchOptions()
         options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
@@ -129,7 +135,7 @@ class Fetcher {
         return data
     }
 
-    DELETE(){
+    deleteOptions(){
         return {
             body: {},
             credentials: 'same-origin',
@@ -140,12 +146,12 @@ class Fetcher {
         }
     }
 
-    async deleteData(endpoint, obj={body: {}, parameters: {}}){
+    async DELETE(endpoint, obj={body: {}, parameters: {}}){
     /**
      * @todo test
      */
         const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
-        const options = this.DELETE()
+        const options = this.deleteOptions()
         options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))

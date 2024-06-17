@@ -36,7 +36,7 @@ describe('Fetcher.mjs',() => {
     })
 
     describe('getData()',() => {
-        expect(typeof scottsdale.location).to.equal('object')
+        expectValuesToMatch(typeof scottsdale.location, 'object')
     })
 
     describe('putData()', () => {

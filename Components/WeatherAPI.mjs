@@ -12,24 +12,25 @@ class WeatherFetcher extends Fetcher {
     }
 
     constructor(){
-        super('http://api.weatherapi.com/v1')
+        super('http://api.weatherapi.com/v1', {key: ENV.weather.key })
     }
+
     async getHistory(city, date){
     /**
      * @todo test
-     * @param {string} city
+     * @param {string} city,country ex: Scottsdale,us
      * @param {string} date format yyyy-mm-dd
      */
         const endpoint = `/history.json`
-        const params = {
-            key: ENV.weather.key,
-            q: city, // City
-            dt: date // Date
-        }
-        const data = await this.getData(endpoint,{parameters: params})
-        return data
+
+        const params = super.parameters()
+            params.q = city // City
+            params.dt = date // Date
+
+        return await this.GET(endpoint, { parameters: params })
     }
 }
+
 export {
     WeatherFetcher
 }

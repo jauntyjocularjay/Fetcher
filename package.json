@@ -5,7 +5,7 @@
         "stripe": "^15.11.0"
     },
     "name": "fetcher",
-    "description": "An ES6, fetch\u001b[D\u001b[D\u001b[D\u001b[F\u001b[C\u001b[C\u001b[C\u001b[C\u001b[Clibrary to ease the use of JSON apis\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D rest\u001b[C\u001b[C\u001b[C\u001b[D\u001b[D\u001b[D\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[D\u001b[D\u001b[D\u001b[D\u001b[DaA\u001b[D\u001b[DAPI\u001b[C\u001b[C",
+    "description": "An ES6, fetch library to ease the use of JSON APIs",
     "version": "0.1.0",
     "main": "Fetcher.mjs",
     "directories": {

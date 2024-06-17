@@ -6,15 +6,14 @@ import {
 
 class OddsFetcher extends Fetcher {
     constructor(){
-        super()
-        this.base_url = 'https://api.the-odds-api.com'
-        this.parameters = {apiKey: ENV.oddsAPI.key}
+        super('https://api.the-odds-api.com')
+        this.parameters = { apiKey: ENV.oddsAPI.key }
     }
 
     /*** @todo test */
     async getSports(){
         const endpoint = '/v4/sports/'
-        return await this.getData(endpoint, {parameters: this.parameters})
+        return await this.GET(endpoint, {parameters: this.parameters})
     }
 
 }
