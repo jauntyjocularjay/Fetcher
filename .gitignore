@@ -1,6 +1,7 @@
 
 node_modules/
 chaitests/
+module/
 git/
 
 .gitmodules
