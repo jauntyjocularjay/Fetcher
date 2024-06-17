@@ -44,8 +44,8 @@ class Fetcher {
         }
     }
 
-    async getData(endpoint){
-        const url = this.base_url + endpoint
+    async getData(endpoint, obj={parameters: {}}){
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
         const options = this.GET()
         const response = await fetch(url, options)
             .catch(err => console.log(err))
@@ -65,13 +65,13 @@ class Fetcher {
     }
 
     // test this
-    async putData(endpoint, body={}, parameters={}){
+    async putData(endpoint, obj={body: {}, parameters: {}}){
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint + Fetcher.parseURLParameters(parameters)
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
         const options = this.PUT()
-        options.body = body
+        options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         const data = await Fetcher.parseString(response)
@@ -91,10 +91,10 @@ class Fetcher {
         }    
     }
 
-    async postData(endpoint, body={}, parameters={}){
-        const url = this.base_url + endpoint + Fetcher.parseURLParameters(parameters)
+    async postData(endpoint, obj={body: {}, parameters: {}}){
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
         const options = this.POST()
-        options.body = body
+        options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         const data = await Fetcher.parseString(response)
@@ -114,13 +114,13 @@ class Fetcher {
         }
     }
 
-    async patchData(endpoint, body={}, parameters={}){
+    async patchData(endpoint, obj={body: {}, parameters: {}}){
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint + Fetcher.parseURLParameters(parameters)
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
         const options = this.PATCH()
-        options.body = body
+        options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         const data = await Fetcher.parseString(response)
@@ -140,13 +140,13 @@ class Fetcher {
         }
     }
 
-    async deleteData(endpoint, body={}, parameters={}){
+    async deleteData(endpoint, obj={body: {}, parameters: {}}){
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint + Fetcher.parseURLParameters(parameters)
+        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
         const options = this.DELETE()
-        options.body = body
+        options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         console.log('deleteData response:', response)
