@@ -22,7 +22,7 @@ import { Fetcher } from '../Fetcher.mjs'
 
 
 const f = new Fetcher(`https://${ENV.fetcherMock.token}.mockapi.io`)
-const userGetted = f.GET('/api/v1/users/0')
+const userGetted = f.GET('/api/v1/users/:user_id')
 
 describe('Fetcher.mjs',() => {
     describe('constructor', () => {
