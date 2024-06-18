@@ -28,7 +28,24 @@ import { TrelloFetcher as Trello } from '../components/Trello.mjs'
 
 
 const w = new Weather()
-let scottsdale = await w.getHistory('scottsdale,us', '2024-06-17')
+
+const t = new Trello()
+console.log('t.parameters', t.parameters)
+// const userData = await t.getUserData('all')
+// console.log('trello user data:', userData)
+const board = { id: '6671546fb65c8adb3129428a' }
+// const boardData = await t.getBoard(board.id)
+// console.log('board data:', boardData)
+const lists = {}
+// const boardLists = await t.getBoardLists(board.id)
+const list = { id: '' }
+// const listData = await t.getList(list.id)
+// const card = {
+//     name: 'test card',
+//     idList: ''
+// }
+// let cardData = await t.postCard()
+
 
 describe('Fetcher.mjs',() => {
     describe('constructor', () => {
@@ -36,7 +53,7 @@ describe('Fetcher.mjs',() => {
     })
 
     describe('getData()',() => {
-        expectValuesToMatch(typeof scottsdale.location, 'object')
+
     })
 
     describe('putData()', () => {

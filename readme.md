@@ -19,7 +19,7 @@ Each request method a pre-baked method in Fetcher that can be modified by overlo
 
 ### template.secret.mjs
 
-This secrets file is included for convenience, although not sctrictly necessary. These are necessary for the components for the `OddsAPI`, `Trello`, and `WeatherAPI`. These are a work in progress and not ready for use.
+This `template.secret.mjs` file is included for convenience, although not sctrictly necessary. These are necessary for the components for the `OddsAPI`, `Trello`, and `WeatherAPI`. These are for testing and I recommend **not** using them. You can also use [dotenv on NPM](https://www.npmjs.com/package/dotenv)
 
 ### the Constructor
 
@@ -87,3 +87,7 @@ deleteOptions
 ```
 
 To modify the options, call `super.getOptions()` and append the object.
+
+## Credits
+
+Cover photo by [Mia Anderson on Unsplash](https://unsplash.com/photos/brown-long-coated-small-dog-Jnc-eF01ADg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
