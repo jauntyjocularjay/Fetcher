@@ -26,7 +26,8 @@ const userGetted = f.GET('/api/v1/users/0')
 
 describe('Fetcher.mjs',() => {
     describe('constructor', () => {
-        expectStringToInclude('subjectAlias', subject, 'targetAlias', target)
+        expectStringToInclude('f.base_url', f.base_url, null, '.mockapi.io')
+        expectObjectsAreEqual('parameters', f.parameters, 'empty object', {})
     })
 
     describe('getData()',() => {
