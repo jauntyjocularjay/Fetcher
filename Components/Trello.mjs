@@ -7,15 +7,16 @@ import { ENV } from '../secret.mjs'
 
 class TrelloFetcher extends Fetcher {
     constructor(){
-        super('https://api.trello.com')
-        this.parameters = {
-            key: ENV.trello.key,
-            token: ENV.trello.token
-        }
+        super('https://api.trello.com', { 'key': ENV.trello.key, 'token': ENV.trello.token })
     }
 
     /*** @todo test */
-    async getUserData(fields){
+    parameters(){
+        return this.parameters
+    }
+
+    /*** @todo test */
+    async getUserData(fields={}){
         const params = super.parameters()
         params.fields = fields
         const endpoint = '/1/members/me/boards'
@@ -23,8 +24,14 @@ class TrelloFetcher extends Fetcher {
     }
 
     /*** @todo test */
-    async getBoard(boardID){
+    async getBoard(boardID=''){
         const endpoint = `/1/boards/${boardID}`
+        return await this.GET(endpoint, {parameters: this.parameters})
+    }
+
+    /*** @todo test */
+    async getBoardLists(board_id=null){
+        const endpoint = `/1/boards/${board_id}/lists`
         return await this.GET(endpoint, {parameters: this.parameters})
     }
 
@@ -49,6 +56,13 @@ class TrelloFetcher extends Fetcher {
         boardID = boardID.toLowerCase()
         const endpoint = `/1/boards/${boardID}`
         return await this.DELETE(endpoint, {parameters: this.parameters})
+    }
+
+    async getList(list_id=''){
+        list_id = list_id.toLowerCase()
+        const endpoint = `1/lists/${list_id}`
+        return await this.GET(endpoint, {parameters: this.parameters})
+        // 1/lists/{:list_id}
     }
 }
 

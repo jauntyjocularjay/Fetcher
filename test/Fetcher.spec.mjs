@@ -1,20 +1,15 @@
 import {
-    throwsAnError,
-    did,
-    does,
-    have,
-    has,
-    is,
-    matches,
-    getCounter,
     expectToBeTrue,
     expectValuesToMatch,
+    expectArraysToBeEqual,
+    expectArrayToInclude,
+    expectArraytoIncludeArrayContents,
     objectsAreEquivalent,
+    expectStringToInclude,
     expectObjectsAreEqual,
     expectToBeNull,
     throwsError,
-    expectConstructorToThrowError,
-    nullCheck,
+    expectConstructorToThrowError
 } from '../module/chaitests/Chai.mjs'
 import { 
     expect,
@@ -22,21 +17,21 @@ import {
 } from 'chai'
 import { ENV } from '../secret.mjs'
 import { Fetcher } from '../Fetcher.mjs'
-import { WeatherFetcher as Weather } from '../components/WeatherAPI.mjs'
-import { TrelloFetcher as Trello } from '../components/Trello.mjs'
 
 
 
-const w = new Weather()
-let scottsdale = await w.getHistory('scottsdale,us', '2024-06-17')
+
+const f = new Fetcher(`https://${ENV.fetcherMock.token}.mockapi.io`)
+const userGetted = f.GET('/api/v1/users/:user_id')
 
 describe('Fetcher.mjs',() => {
     describe('constructor', () => {
-        expectValuesToMatch(w.base_url, 'http://api.weatherapi.com/v1')
+        expectStringToInclude('f.base_url', f.base_url, null, '.mockapi.io')
+        expectObjectsAreEqual('parameters', f.parameters, 'empty object', {})
     })
 
     describe('getData()',() => {
-        expectValuesToMatch(typeof scottsdale.location, 'object')
+
     })
 
     describe('putData()', () => {
