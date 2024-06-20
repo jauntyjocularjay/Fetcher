@@ -23,7 +23,9 @@ import { Fetcher } from '../Fetcher.mjs'
 const f = new Fetcher(`https://${ENV.fetcherMock.token}.mockapi.io`)
 const endpoint = {
     user: '/api/v1/users/:user_id',
-    id: ':user_id/id/:new_value'
+    id: '/api/v1/users/:user_id/id/:new_value',
+    avatar: '/api/v1/users/:user_id/avatar/:url/',
+    name: '/api/v1/users/:user_id/name/:user_name'
 }
 
 const user1 = await f.GET(endpoint.user.replace(':user_id','1'))
@@ -35,20 +37,18 @@ const user1Target = {
 }
 
 
+
+
 const user19Target = {
     "createdAt": "2024",
     "name": "Mista Nineteen",
     "avatar": "1207.jpg",
     "id": "19"
 }
-const user19endpoint = endpoint.user.replace(':user_id', '')
+const user19endpoint = endpoint.user.replace(':user_id', '19')
 
 await f.POST(user19endpoint, {body: user19Target})
 let user19 = await f.GET(user19endpoint)
-console.log(`
-    user19endpoint: ${user19endpoint},
-    user19Target: ${user19Target},
-    user19: ${user19}`)
 
 describe('Fetcher.mjs',() => {
     describe('constructor', () => {
