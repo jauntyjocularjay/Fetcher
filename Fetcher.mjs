@@ -17,7 +17,7 @@ class Fetcher {
 
     #parameters(){
         return Object.assign(this.#parameters)
-    } 
+    }
 
     static logObject(obj){
         for(const [key, value] of Object.entries(obj)){
