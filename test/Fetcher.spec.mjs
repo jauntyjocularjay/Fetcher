@@ -59,7 +59,7 @@ describe('Fetcher.mjs',() => {
     })
 
     describe('putData()', () => {
-        expectObjectsAreEqual('user19', user18, 'user19Target', user18Target)
+        expectObjectsAreEqual('user18', user18, 'user18Target', user18Target)
     })
 
     describe('patchData()', () => {
