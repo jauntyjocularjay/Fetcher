@@ -35,15 +35,16 @@ const user1Target = {
 }
 
 
-const user19Target = {
+const user18Target = {
     "createdAt": "2024",
     "name": "Floyd",
     "avatar": "1207.jpg",
-    "id": "19"
+    "id": "18"
 }
-const user19endpoint = endpoint.user.replace(':user_id', user19Target.id)
-const user19 = await f.PUT(user19endpoint)
-
+const user18endpoint = endpoint.user.replace(':user_id', user18Target.id)
+let user18 = await f.PUT(user18endpoint, {body: user18Target})
+user18 = await f.GET(user18endpoint)
+console.log('user18', user18, '\n', 'user18Target', user18Target)
 
 
 
@@ -58,7 +59,7 @@ describe('Fetcher.mjs',() => {
     })
 
     describe('putData()', () => {
-        expectObjectsAreEqual('user19', user19, 'user19Target', user19Target)
+        expectObjectsAreEqual('user19', user18, 'user19Target', user18Target)
     })
 
     describe('patchData()', () => {

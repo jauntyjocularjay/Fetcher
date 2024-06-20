@@ -75,7 +75,8 @@ class Fetcher {
         let url = this.base_url + endpoint
         if(obj.parameters) url += Fetcher.parseURLParameters(obj.parameters)
         const options = this.putOptions()
-        options.body = obj.body
+        options.body = JSON.stringify(obj.body)
+        console.log('typeof options.body', typeof options.body, ':', options.body)
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         return await Fetcher.parseString(response)
@@ -96,7 +97,7 @@ class Fetcher {
         let url = this.base_url + endpoint
         if(obj.parameters) url += Fetcher.parseURLParameters(obj.parameters)
         const options = this.postOptions()
-        options.body = obj.body
+        options.body = JSON.stringify(obj.body)
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         return await Fetcher.parseString(response)
@@ -120,7 +121,7 @@ class Fetcher {
         let url = this.base_url + endpoint
         if(obj.parameters) url += Fetcher.parseURLParameters(obj.parameters)
         const options = this.patchOptions()
-        options.body = obj.body
+        options.body = JSON.stringify(obj.body)
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         return await Fetcher.parseString(response)
@@ -144,7 +145,7 @@ class Fetcher {
         let url = this.base_url + endpoint
         if(obj.parameters) url += Fetcher.parseURLParameters(obj.parameters)
         const options = this.deleteOptions()
-        options.body = obj.body
+        options.body = JSON.stringify(obj.body)
         const response = await fetch(url, options)
             .catch(err => console.log(err))
         return await Fetcher.parseString(response)
