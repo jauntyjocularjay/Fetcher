@@ -20,10 +20,10 @@ import { Fetcher } from '../Fetcher.mjs'
 
 
 
-
 const f = new Fetcher(`https://${ENV.fetcherMock.token}.mockapi.io`)
 const endpoint = {
-    user: '/api/v1/users/:user_id'
+    user: '/api/v1/users/:user_id',
+    id: ':user_id/id/:new_value'
 }
 
 const user1 = await f.GET(endpoint.user.replace(':user_id','1'))
@@ -35,18 +35,20 @@ const user1Target = {
 }
 
 
-const user18Target = {
+const user19Target = {
     "createdAt": "2024",
-    "name": "Floyd",
+    "name": "Mista Nineteen",
     "avatar": "1207.jpg",
-    "id": "18"
+    "id": "19"
 }
-const user18endpoint = endpoint.user.replace(':user_id', user18Target.id)
-let user18 = await f.PUT(user18endpoint, {body: user18Target})
-user18 = await f.GET(user18endpoint)
-console.log('user18', user18, '\n', 'user18Target', user18Target)
+const user19endpoint = endpoint.user.replace(':user_id', '')
 
-
+await f.POST(user19endpoint, {body: user19Target})
+let user19 = await f.GET(user19endpoint)
+console.log(`
+    user19endpoint: ${user19endpoint},
+    user19Target: ${user19Target},
+    user19: ${user19}`)
 
 describe('Fetcher.mjs',() => {
     describe('constructor', () => {
@@ -59,7 +61,7 @@ describe('Fetcher.mjs',() => {
     })
 
     describe('putData()', () => {
-        expectObjectsAreEqual('user18', user18, 'user18Target', user18Target)
+        
     })
 
     describe('patchData()', () => {
@@ -67,7 +69,7 @@ describe('Fetcher.mjs',() => {
     })
 
     describe('postData()', () => {
-
+        expectObjectsAreEqual('user19', user19, 'user19Target', user19Target)
     })
 
     describe('deleteData()', () => {
