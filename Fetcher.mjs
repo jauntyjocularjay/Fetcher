@@ -48,12 +48,12 @@ class Fetcher {
     }
 
     async GET(endpoint, obj={parameters: {}}){
-        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
+        if(obj.body) throw new Error('BodyError: GET requests do not accept bodies')
+        let url = this.base_url + endpoint
+        if(obj.parameters) url += Fetcher.parseURLParameters(obj.parameters)
         const response = await fetch(url, this.getOptions())
             .catch(err => console.log(err))
-        const data = await Fetcher.parseString(response)
-        data.status = response.status
-        return data
+        return await Fetcher.parseString(response)
     }
 
     putOptions(){
@@ -72,15 +72,13 @@ class Fetcher {
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
+        let url = this.base_url + endpoint
+        if(obj.parameters) url += Fetcher.parseURLParameters(obj.parameters)
         const options = this.putOptions()
         options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
-        const data = await Fetcher.parseString(response)
-        data.status = response.status
-
-        return data
+        return await Fetcher.parseString(response)
     }
 
     postOptions(){
@@ -95,15 +93,13 @@ class Fetcher {
     }
 
     async POST(endpoint, obj={body: {}, parameters: {}}){
-        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
+        let url = this.base_url + endpoint
+        if(obj.parameters) url += Fetcher.parseURLParameters(obj.parameters)
         const options = this.postOptions()
         options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
-        const data = await Fetcher.parseString(response)
-        data.status = response.status
-
-        return data
+        return await Fetcher.parseString(response)
     }
 
     patchOptions(){
@@ -121,15 +117,13 @@ class Fetcher {
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
+        let url = this.base_url + endpoint
+        if(obj.parameters) url += Fetcher.parseURLParameters(obj.parameters)
         const options = this.patchOptions()
         options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
-        const data = await Fetcher.parseString(response)
-        data.status = response.status
-        // console.log('patchData data:', data)
-        return data
+        return await Fetcher.parseString(response)
     }
 
     deleteOptions(){
@@ -147,17 +141,13 @@ class Fetcher {
     /**
      * @todo test
      */
-        const url = this.base_url + endpoint + Fetcher.parseURLParameters(obj.parameters)
+        let url = this.base_url + endpoint
+        if(obj.parameters) url += Fetcher.parseURLParameters(obj.parameters)
         const options = this.deleteOptions()
         options.body = obj.body
         const response = await fetch(url, options)
             .catch(err => console.log(err))
-        console.log('deleteData response:', response)
-        const data = await Fetcher.parseString(response)
-        data.status = response.status
-
-
-        return data
+        return await Fetcher.parseString(response)
     }
 }
 
