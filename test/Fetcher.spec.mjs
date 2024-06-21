@@ -22,25 +22,25 @@ import { Fetcher } from '../Fetcher.mjs'
 
 
 const f = new Fetcher(`https://${ENV.fetcherMock.token}.mockapi.io`)
-const user_endpoint = {
-    user: '/api/v1/users/:user_id',
-    id: '/api/v1/users/:user_id/id/:new_value',
-    avatar: '/api/v1/users/:user_id/avatar/:url/',
-    name: '/api/v1/users/:user_id/name/:user_name'
+const merch_endpoint = {
+    item: '/api/v1/merch/:item_id',
+    id: '/api/v1/merch/:item_id/id/:new_value',
+    uri: '/api/v1/merch/:item_id/image/:image_uri',
+    name: '/api/v1/merch/:item_id/name/:item_name'
 }
 const task_endpoint = {
-    tasks: '/api/v1/tasks/',
+    tasks: '/api/v1/tasks',
     task: '/api/v1/tasks/:task_id'
 }
 
 
-const user1 = await f.GET(user_endpoint.user.replace(':user_id','1'))
-const user1Target = {
-    "createdAt": "2024-06-20T17:06:46.284Z",
-    "name": "Sadie Brown",
-    "avatar": "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/290.jpg",
+const merch1 = await f.GET(merch_endpoint.item.replace(':item_id','1'))
+const merch1Target = {
+    "price": "904.00",
+    "name": "Rustic Bronze Hat",
     "id": "1"
 }
+console.log('merch1', merch1, '\nmerch1Target', merch1Target)
 
 const allTasks = await f.GET(task_endpoint.tasks)
 const taskStartLength = allTasks.length
@@ -58,6 +58,11 @@ console.log('newTask', newTask)
 const taskNewLength = newTask.id
 console.log('taskNewLength', taskNewLength)
 
+let updatedTask = await f.PATCH(task_endpoint.task.replace(':task_id','1'), {body: {completed: true}})
+
+// updatedTask = await f.GET(task_endpoint.task.replace(':task_id','1'))
+console.log('updatedTask', updatedTask)
+
 
 describe('Fetcher.mjs',() => {
     describe('constructor', () => {
@@ -66,16 +71,16 @@ describe('Fetcher.mjs',() => {
     })
 
     describe('getData()',() => {
-        expectObjectsAreEqual('user1', user1, 'user1Target', user1Target)
+        expectObjectsAreEqual('merch1', merch1, 'merch1Target', merch1Target)
         expectObjectsAreEqual('task1', task1, 'task1Target', task1Target)
     })
 
     describe('putData()', () => {
-        
+
     })
 
     describe('patchData()', () => {
-
+        expectValuesToEqual('(task/1).completed', updatedTask.completed, 'is true', true)
     })
 
     describe('postData()', () => {
