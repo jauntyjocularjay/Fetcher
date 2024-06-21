@@ -80,6 +80,7 @@ describe('Fetcher.mjs',() => {
 
     describe('postData()', () => {
         expectValuesToEqual('start length', taskStartLength, 'new length', taskNewLength - 1)
+        expectValuesToEqual('start length', taskStartLength, 'new length', taskNewLength, false)
     })
 
     describe('deleteData()', () => {
