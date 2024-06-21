@@ -149,7 +149,7 @@ class Fetcher {
 
     /*** @todo test */
     async DELETE(endpoint, obj={body: {}, parameters: {}}){
-        const url = Fetcher.#constructEndpoint(base_url, endpoint, obj)
+        const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
         const options = Fetcher.#constructOptions(this.deleteOptions(), obj)
         const response = await fetch(url, options)
             .catch(err => console.log(err))
