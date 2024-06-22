@@ -87,9 +87,11 @@ class Fetcher {
 
     /*** @todo test */
     async GET(endpoint='', obj={ headers:{}, parameters:{} }){
-        if(obj.body !== undefined || obj.body !== null) { throw new Error('BodyError: GET requests DO NOT accept "obj.body"')}
-
-        return await this.request(Method.GET, endpoint, obj)
+        if(obj.body === undefined || obj.body === null) {
+            return await this.request(Method.GET, endpoint, obj)
+        } else {
+            throw new Error('BodyError: GET requests DO NOT accept "obj.body"')
+        }
     }
 
     /*** @todo test */
