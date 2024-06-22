@@ -1,8 +1,5 @@
-
+.vscode/
+mockoon/
 node_modules/
-chaitests/
-module/
-git/
 
-.gitmodules
 secret.mjs

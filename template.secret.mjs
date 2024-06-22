@@ -1,6 +1,8 @@
 class ENV {
-    APINAME = {
-        key: ''
+    static API = {
+        key: '',
+        secret: '',
+        token: ''
     }
 }
 
