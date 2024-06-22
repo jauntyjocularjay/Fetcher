@@ -50,7 +50,7 @@ PATCH(endpoint, obj={body: {}, URLParameters: {}})
 DELETE(endpoint, obj={body: {}, URLParameters: {}})
 ```
 
-The data is returned with a status property appended for testing convenience. The body is the body payload. The URLParameters modifies the URL to include query parameters.
+The body is the body payload. The URLParameters modifies the URL to include query parameters.
 
 ## Extending Fetcher
 
