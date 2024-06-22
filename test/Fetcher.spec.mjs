@@ -12,7 +12,7 @@ import {
     throwsError,
     expectConstructorToThrowError
 } from '../module/chaitests/Chai.mjs'
-import { 
+import {
     expect,
     should
 } from 'chai'
@@ -29,72 +29,66 @@ const merch_endpoint = {
     name: '/api/v1/merch/:item_id/name/:item_name'
 }
 const task_endpoint = {
-    tasks: '/api/v1/tasks',
+    all_tasks: '/api/v1/tasks',
     task: '/api/v1/tasks/:task_id'
 }
 
+function constructorTests(){
 
-const merch1 = await f.GET(merch_endpoint.item.replace(':item_id','1'))
-const merch1Target = {
-    "price": "904.00",
-    "name": "Rustic Bronze Hat",
-    "id": "1"
-}
-console.log('merch1', merch1, '\nmerch1Target', merch1Target)
-
-const allTasks = await f.GET(task_endpoint.tasks)
-const taskStartLength = allTasks.length
-console.log('taskStartLength', taskStartLength)
-
-const task1 = await f.GET(task_endpoint.task.replace(':task_id','1'))
-const task1Target = {
-    "completed": false,
-    "title": "title 1",
-    "id": "1"
+    describe('Fetcher constructor testing', () => {
+        expectStringToInclude('f.base_url', f.base_url, 'https://', 'https://')
+        expectStringToInclude('f.base_url', f.base_url, 'mockapi.io', 'mockapi.io')
+    })
 }
 
-const newTask = await f.POST(task_endpoint.task.replace(':task_id',''))
-console.log('newTask', newTask)
-const taskNewLength = newTask.id
-console.log('taskNewLength', taskNewLength)
+async function getTests(){
+    const task1Subject = await f.GET(task_endpoint.task.replace(':task_id',1))
+    const task1Target = {
+        "completed": false,
+        "title": "title 1",
+        "id": "1"
+    }
 
-let updatedTask = await f.PATCH(task_endpoint.task.replace(':task_id','1'), {body: {completed: true}})
+    describe('Fetcher.GET testing', () => {
+        expectValuesToEqual('subject completed', task1Subject.completed, 'target completed', task1Target.completed)
+        expectValuesToEqual('subject title', task1Subject.title, 'target title', task1Target.title)
+        expectValuesToEqual('subject id', task1Subject.id, 'target id', task1Target.id)
+    })
+}
 
-// updatedTask = await f.GET(task_endpoint.task.replace(':task_id','1'))
-console.log('updatedTask', updatedTask)
+async function deleteTests(){
+    const merchStart = await f.GET(merch_endpoint.item.replace(':item_id', ''))
+    console.log('merch start:', merchStart)
+    await f.DELETE(merch_endpoint.item.replace(':item_id', merchStart.length-1))
+    const merchAfter = await f.GET(merch_endpoint.item.replace(':item_id', ''))
 
+    describe('Fetcher.DELETE testing', () => {
+        expectValuesToEqual('Length at the start: '+merchStart.length, merchStart.length, 'length at the end: '+merchAfter.length, merchAfter.length)
+    })
+}
 
-describe('Fetcher.mjs',() => {
-    describe('constructor', () => {
-        expectStringToInclude('f.base_url', f.base_url, null, '.mockapi.io')
-        expectObjectsAreEqual('parameters', f.parameters, 'empty object', {})
+async function postTests(){
+    const itemToAdd = {
+        "price": "3.14",
+        "name": "Strawberry Rhubarb Pi",
+        "id": "1"
+    }
+
+    console.log(`merch_endpoint.item.replace(':item_id','')`, merch_endpoint.item.replace(':item_id',''))
+    const postResult = await f.POST(merch_endpoint.item.replace(':item_id', ''), {body: itemToAdd})
+    console.log('postResult', postResult)
+    const allItems = await f.GET(merch_endpoint.item.replace(':item_id',''))
+    console.log('allItems:', allItems)
+    const lastElement = allItems[allItems.length-1]
+    describe('Fetcher.POST testing', () => {
+        expectValuesToEqual('subject price', lastElement.price, 'item added price', itemToAdd.price)
     })
 
-    describe('getData()',() => {
-        expectObjectsAreEqual('merch1', merch1, 'merch1Target', merch1Target)
-        expectObjectsAreEqual('task1', task1, 'task1Target', task1Target)
-    })
-
-    describe('putData()', () => {
-
-    })
-
-    describe('patchData()', () => {
-        expectValuesToEqual('(task/1).completed', updatedTask.completed, 'is true', true)
-    })
-
-    describe('postData()', () => {
-        expectValuesToEqual('start length', taskStartLength, 'new length', taskNewLength - 1)
-        expectValuesToEqual('start length', taskStartLength, 'new length', taskNewLength, false)
-    })
-
-    describe('deleteData()', () => {
-
-    })
-})
+}
 
 
-
-
-
+constructorTests()
+await getTests()
+await deleteTests()
+await postTests()
 

@@ -138,8 +138,8 @@ class Fetcher {
 
     deleteOptions(){
         return {
-            body: {},
-            credentials: 'same-origin',
+            // body: {},
+            // credentials: 'same-origin',
             headers: {
                 Accept: 'application/json, text/plain, */*'
             },
