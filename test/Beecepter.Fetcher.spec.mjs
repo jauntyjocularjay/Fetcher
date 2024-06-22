@@ -17,7 +17,7 @@ import {
     should
 } from 'chai'
 import { ENV } from '../secret.mjs'
-import { BeecptorFetcher as Beeceptor } from '../Components/Beecepter.mjs'
+import { BeecptorFetcher as Beeceptor } from '../Components/Beeceptor.mjs'
 
 
 
