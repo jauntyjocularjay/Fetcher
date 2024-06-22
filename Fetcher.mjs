@@ -1,6 +1,7 @@
-
-// An enum to define types of responses
 class Method {
+/**
+ * @class - Method is an enum class that defines the valid types of requests supported by Fetcher.
+ */
     static GET = 'GET'
     static PUT = 'PUT'
     static POST = 'POST'
@@ -10,150 +11,105 @@ class Method {
 
 class Fetcher {
 
-    constructor(base_url='', parameters={}){
+    /*** @todo test */
+
+    constructor(base_url='', parameters=null){
+    /**
+     * @constructor
+     * @param { string } base_url - the base URL used to construct http requests
+     * @param { object } parameters - an object containing key-value pairs to be used as query parameters in EVERY request
+     */
         this.base_url = base_url
         this.parameters = parameters
     }
 
-    #parameters(){
-        return Object.assign(this.#parameters)
-    }
-
-    static logObject(obj){
-        for(const [key, value] of Object.entries(obj)){
-            console.log(key, value)
-        }
-    }
-
+    /*** @todo test */
     static #parseURLParameters(parameters){
-        let result = ''
-        for(const [key, value] of Object.entries(parameters)){
-            result +=`&${key}=${value}`
-        }
-        result = '?' + result.slice(1)
-        return result
+    /**
+     * @static @method
+     * @param { Object } parameters - an object containing key-value pairs to be used as query parameters in a request
+     * @returns - a string of properly formatted query parameters for appending to the URL
+     */
+        const mergedParameters = {... this.parameters, ...parameters}
+        const queryStr = Object.entries(mergedParameters).map(([key, value]) => `${key}=${value}`).join('&')
+        return `?${queryStr}`
     }
 
-    static #constructEndpoint(base_url, endpoint='', obj){
+    /*** @todo test */
+    static #constructURL(base_url, endpoint, parameters){
+    /**
+     * @static @method
+     * @param { string } base_url
+     * @param { string } endpoint - the endpoint to be appended to the base_url
+     * @param { object } parameters - an object containing key-value pairs to be used in this specific request
+     */
         let url = base_url + endpoint
-        if(obj.parameters){
-            url += Fetcher.#parseURLParameters(obj.parameters)
-        }
+        if(parameters){ url += Fetcher.#parseURLParameters(this.parameters, parameters) }
         return url
     }
 
-    static #constructOptions(option, obj){
-        const options = option
-        options.body = JSON.stringify(obj.body)
+    /*** @todo test */
+    static #options(method=Method.GET, headers={}, body=null){
+    /**
+     * @static @method
+     * @param { string } method - the type of request to be made
+     * @param { object } headers - an object containing key-value pairs to be used as headers in the request
+     * @param { object } body - an object containing the body of the request (if applicable)
+     */
+        const options = {
+            credentials: 'same-origin',
+            headers: {
+                Accept: 'application/json, text/plain, */*'
+            },
+            method: method
+        }
+
+        for(const [key, value] of Object.entries(headers)){
+            options.headers[key] = value
+        }
+
+        if(body){ options.body = JSON.stringify(body) }
+
         return options
     }
 
-    static async #parseString(response){
-        const data = await response.json()
-        return data
-    }
+    /*** @todo test */
+    async request(method, endpoint='', obj={headers:null, body:null, parameters: null}){
+        if(obj.headers === undefined) obj.headers = null
+        if(obj.body === undefined) obj.body = null
+        if(obj.parameters === undefined) obj.parameters = null
 
-    static methods(){
-        return ['getData', 'postData', 'patchData', 'deleteData']
-    }
-
-    getOptions(){
-        return {
-            credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json, text/plain, */*'
-            },
-            method: Method.GET
-        }
-    }
-
-    async GET(endpoint='', obj={parameters:{}}){
-        if(obj.body) throw new Error('BodyError: GET requests do not accept bodies')
-
-        const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
-        const response = await fetch(url, this.getOptions())
-            .catch(err => console.log(err))
-        return await Fetcher.#parseString(response)
-    }
-
-    putOptions(){
-        return {
-            body: {}, 
-            credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json, text/plain, */*'
-            },
-            method: Method.PUT
-        }    
+        const url = Fetcher.#constructURL(this.base_url, endpoint, obj.parameters)
+        const options = Fetcher.#options(method)
+        const response = await fetch(url, options)
+        return response.json()
     }
 
     /*** @todo test */
-    async PUT(endpoint='', obj={body: {}, parameters: {}}){
-        const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
-        const options = Fetcher.#constructOptions(this.putOptions(), obj)
-        const response = await fetch(url, options)
-            .catch(err => console.log(err))
-        return await Fetcher.#parseString(response)
-    }
+    async GET(endpoint='', obj={ headers:{}, parameters:{} }){
+        if(obj.body !== undefined || obj.body !== null) { throw new Error('BodyError: GET requests DO NOT accept "obj.body"')}
 
-    postOptions(){
-        return {
-            body: {}, 
-            credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json, text/plain, */*'
-            },
-            method: Method.POST
-        }    
+        return await this.request(Method.GET, endpoint, obj)
     }
 
     /*** @todo test */
-    async POST(endpoint='', obj={body: {}, parameters: {}}){
-        const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
-        const options = Fetcher.#constructOptions(this.postOptions(), obj)
-        const response = await fetch(url, options)
-            .catch(err => console.log(err))
-        return await Fetcher.#parseString(response)
-    }
-
-    patchOptions(){
-        return {
-            body: {},
-            credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json, text/plain, */*'
-            },
-            method: Method.PATCH
-        }
+    async PUT(endpoint='', obj={ headers:{}, body: {}, parameters: {} }){
+        return await this.request(Method.PUT, endpoint, obj)
     }
 
     /*** @todo test */
-    async PATCH(endpoint='', obj={body: {}, parameters: {}}){
-        const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
-        const options = Fetcher.#constructOptions(this.patchOptions(), obj)
-        const response = await fetch(url, options)
-            .catch(err => console.log(err))
-        return await Fetcher.#parseString(response)
-    }
-
-    deleteOptions(){
-        return {
-            body: {},
-            credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json, text/plain, */*'
-            },
-            method: Method.DELETE
-        }
+    async POST(endpoint='', obj={ headers:{}, body: {}, parameters: {} }){
+        return await this.request(Method.POST, endpoint, obj)
     }
 
     /*** @todo test */
-    async DELETE(endpoint='', obj={body: {}, parameters: {}}){
-        const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
-        const options = Fetcher.#constructOptions(this.deleteOptions(), obj)
-        const response = await fetch(url, options)
-            .catch(err => console.log(err))
-        return await Fetcher.#parseString(response)
+    async PATCH(endpoint='', obj={ headers:{}, body: {}, parameters: {} }){
+        return await this.request(Method.PATCH, endpoint, obj)
+    }
+
+    /*** @todo test */
+    async DELETE(endpoint='', obj={ headers:{}, body: {}, parameters: {} }){
+        return await this.request(Method.DELETE, endpoint, obj)
     }
 }
 
