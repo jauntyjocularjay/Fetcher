@@ -34,7 +34,7 @@ class Fetcher {
         return result
     }
 
-    static #constructEndpoint(base_url, endpoint, obj){
+    static #constructEndpoint(base_url, endpoint='', obj){
         let url = base_url + endpoint
         if(obj.parameters){
             url += Fetcher.#parseURLParameters(obj.parameters)
@@ -67,7 +67,7 @@ class Fetcher {
         }
     }
 
-    async GET(endpoint, obj={parameters:{}}){
+    async GET(endpoint='', obj={parameters:{}}){
         if(obj.body) throw new Error('BodyError: GET requests do not accept bodies')
 
         const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
@@ -88,7 +88,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    async PUT(endpoint, obj={body: {}, parameters: {}}){
+    async PUT(endpoint='', obj={body: {}, parameters: {}}){
         const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
         const options = Fetcher.#constructOptions(this.putOptions(), obj)
         const response = await fetch(url, options)
@@ -108,7 +108,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    async POST(endpoint, obj={body: {}, parameters: {}}){
+    async POST(endpoint='', obj={body: {}, parameters: {}}){
         const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
         const options = Fetcher.#constructOptions(this.postOptions(), obj)
         const response = await fetch(url, options)
@@ -128,7 +128,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    async PATCH(endpoint, obj={body: {}, parameters: {}}){
+    async PATCH(endpoint='', obj={body: {}, parameters: {}}){
         const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
         const options = Fetcher.#constructOptions(this.patchOptions(), obj)
         const response = await fetch(url, options)
@@ -148,7 +148,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    async DELETE(endpoint, obj={body: {}, parameters: {}}){
+    async DELETE(endpoint='', obj={body: {}, parameters: {}}){
         const url = Fetcher.#constructEndpoint(this.base_url, endpoint, obj)
         const options = Fetcher.#constructOptions(this.deleteOptions(), obj)
         const response = await fetch(url, options)
