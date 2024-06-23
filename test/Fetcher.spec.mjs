@@ -21,7 +21,7 @@ import { Fetcher } from '../Fetcher.mjs'
 
 
 
-const f = new Fetcher(`https://${ENV.fetcherMock.token}.mockapi.io`)
+const f = new Fetcher(`https://${ENV.mockio.token}.mockapi.io`)
 const merch_endpoint = {
     item: '/api/v1/merch/:item_id',
     id: '/api/v1/merch/:item_id/id/:new_value',

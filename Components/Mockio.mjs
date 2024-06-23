@@ -1,11 +1,11 @@
 import {
     Fetcher
 } from '../Fetcher.mjs'
-import ENV from '../secret.mjs'
+import { ENV } from '../secret.mjs'
 
 
 
-class MockAPI extends Fetcher {
+class MockIOFetcher extends Fetcher {
     static TYPE = {
         array: {"type": "array"},
         bigint: {"type": "bigint"},
@@ -16,41 +16,30 @@ class MockAPI extends Fetcher {
         symbol: {"type": "symbol"},
         nulled: {"type": "null"}
     }
+
     constructor(resourceLayers=[]){
+        console.log(ENV.mockio.token)
         super(`https//${ENV.mockio.token}.mockapi.io`)
+        this.endpoints = {}
 
+        this.setEndpoints(resourceLayers)
+    }
+
+    setEndpoints(resourceLayers){
         resourceLayers.forEach(resource => {
-            if( resource.type === undefined ||
-                resource.type === MockAPI.array.type ||
-                resource.type === MockAPI.bigint.type ||
-                resource.type === MockAPI.boolean.type ||
-                resource.type === MockAPI.number.type ||
-                resource.type === MockAPI.object.type ||
-                resource.type === MockAPI.string.type ||
-                resource.type === MockAPI.symbol.type ||
-                resource.type === MockAPI.nulled.type ){
-                throw new Error('')
-            }
+            if(typeof resource !== 'object'){ throw new TypeError('Resource-layers should contain a schema object') }
+            let endpoint = ''
 
-
-            for(const [key, value] of Object.entries(resource)){                
-                endpoint[key] = value
+            for(let [key, value] of Object.entries(resource)){                
+                endpoint += `/${key}/:${key}_id`
+                this.endpoints[key] = endpoint
+                if(typeof value !== 'string'){
+                    key = value
+                }
             }
         })
     }
 }
 
-const resourceLayers = [{
-    "user": {
-        "user_id": { "type": "number" },
-        "name": { "type":"string" }
-    }
-}, {
-    "task": {
-        "task_id": { "type": "number" },
-        "title": { "type":"string" }
-    }
-}]
 
-
-export { MockAPI as MockAPIFetcher }
+export { MockIOFetcher }
