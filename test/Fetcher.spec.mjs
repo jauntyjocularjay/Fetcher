@@ -56,14 +56,29 @@ async function getTests(){
     })
 }
 
-async function deleteTests(){
-    const merchStart = await f.GET(merch_endpoint.item.replace(':item_id', ''))
-    console.log('merch start:', merchStart)
-    await f.DELETE(merch_endpoint.item.replace(':item_id', merchStart.length-1))
-    const merchAfter = await f.GET(merch_endpoint.item.replace(':item_id', ''))
+async function putTests(){
 
-    describe('Fetcher.DELETE testing', () => {
-        expectValuesToEqual('Length at the start: '+merchStart.length, merchStart.length, 'length at the end: '+merchAfter.length, merchAfter.length)
+    let updatedItem = await f.GET(merch_endpoint.item.replace(':item_id',48))
+    const newPrice = '4.80'
+    updatedItem.price = newPrice
+    await f.PUT(merch_endpoint.item.replace(':item_id',48), {body: updatedItem})
+    updatedItem = await f.GET(merch_endpoint.item.replace(':item_id',48))
+
+    describe('Fetcher.PUT testing', () => {
+        expectValuesToEqual('subject price', updatedItem.price, 'item51priceUpdate price', newPrice)
+    })
+}
+
+async function patchTests(){
+
+    let updatedItem = await f.GET(merch_endpoint.item.replace(':item_id',30))
+    const newPrice = '3.00'
+    updatedItem.price = newPrice
+    await f.PATCH(merch_endpoint.item.replace(':item_id',30), {body: updatedItem})
+    updatedItem = await f.GET(merch_endpoint.item.replace(':item_id',30))
+
+    describe('Fetcher.PATCH testing', () => {
+        expectValuesToEqual('subject price', updatedItem.price, 'newPrice', newPrice)
     })
 }
 
@@ -74,21 +89,31 @@ async function postTests(){
         "id": "1"
     }
 
-    console.log(`merch_endpoint.item.replace(':item_id','')`, merch_endpoint.item.replace(':item_id',''))
-    const postResult = await f.POST(merch_endpoint.item.replace(':item_id', ''), {body: itemToAdd})
-    console.log('postResult', postResult)
+    await f.POST(merch_endpoint.item.replace(':item_id', ''), {body: itemToAdd})
     const allItems = await f.GET(merch_endpoint.item.replace(':item_id',''))
-    console.log('allItems:', allItems)
     const lastElement = allItems[allItems.length-1]
+    
     describe('Fetcher.POST testing', () => {
         expectValuesToEqual('subject price', lastElement.price, 'item added price', itemToAdd.price)
     })
 
 }
 
+async function deleteTests(){
+    const merchStart = await f.GET(merch_endpoint.item.replace(':item_id', ''))
+    await f.DELETE(merch_endpoint.item.replace(':item_id', merchStart.length))
+    const merchAfter = await f.GET(merch_endpoint.item.replace(':item_id', ''))
+
+    describe('Fetcher.DELETE testing', () => {
+        expectValuesToEqual('Length at the start: '+merchStart.length, merchStart.length, 'length at the end: '+merchAfter.length, merchAfter.length, false)
+    })
+}
+
 
 constructorTests()
 await getTests()
-await deleteTests()
+await putTests()
+await patchTests()
 await postTests()
+await deleteTests()
 
