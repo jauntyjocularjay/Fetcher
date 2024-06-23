@@ -59,7 +59,8 @@ class Fetcher {
         const options = {
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*'
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
             },
             method: method
         }
