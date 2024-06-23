@@ -61,7 +61,8 @@ class Fetcher {
         return {
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*'
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
             },
             method: Method.GET
         }
@@ -81,7 +82,8 @@ class Fetcher {
             body: {}, 
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*'
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
             },
             method: Method.PUT
         }    
@@ -101,7 +103,8 @@ class Fetcher {
             body: {}, 
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*'
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
             },
             method: Method.POST
         }    
@@ -121,7 +124,8 @@ class Fetcher {
             body: {},
             credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*'
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
             },
             method: Method.PATCH
         }
@@ -141,7 +145,8 @@ class Fetcher {
             // body: {},
             // credentials: 'same-origin',
             headers: {
-                Accept: 'application/json, text/plain, */*'
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json'
             },
             method: Method.DELETE
         }
