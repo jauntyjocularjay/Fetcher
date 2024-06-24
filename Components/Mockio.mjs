@@ -1,56 +1,94 @@
 import {
     Fetcher
 } from '../Fetcher.mjs'
-import ENV from '../secret.mjs'
+import { ENV } from '../secret.mjs'
 
 
 
-class MockAPI extends Fetcher {
-    static TYPE = {
-        array: {"type": "array"},
-        bigint: {"type": "bigint"},
-        boolean: {"type": "boolean"},
-        number: {"type": "number"},
-        object: {"type": "object"},
-        string: {"type": "string"},
-        symbol: {"type": "symbol"},
-        nulled: {"type": "null"}
+class SchemaType {
+    static ARRAY = {"type": "array"}
+    static BIGINT = {"type": "bigint"}
+    static BOOLEAN = {"type": "boolean"}
+    static NUMBER = {"type": "number"}
+    static OBJECT = {"type": "object"}
+    static STRING = {"type": "string"}
+    static SYMBOL = {"type": "symbol"}
+    static NULL = {"type": "null"}
+
+    static typeMatches(obj){
+        const entries = Object.entries(obj)
+        if(
+            entries.length === 2 &&
+            entries[0] === 'type' && (
+            entries[1] === 'array' ||
+            entries[1] === 'bigint' ||
+            entries[1] === 'boolean' ||
+            entries[1] === 'number' ||
+            entries[1] === 'object' ||
+            entries[1] === 'string' ||
+            entries[1] === 'symbol' ||
+            entries[1] === 'null')
+        ){
+            return true
+        } else {
+            return false
+        }
     }
-    constructor(resourceLayers=[]){
-        super(`https//${ENV.mockio.token}.mockapi.io`)
 
-        resourceLayers.forEach(resource => {
-            if( resource.type === undefined ||
-                resource.type === MockAPI.array.type ||
-                resource.type === MockAPI.bigint.type ||
-                resource.type === MockAPI.boolean.type ||
-                resource.type === MockAPI.number.type ||
-                resource.type === MockAPI.object.type ||
-                resource.type === MockAPI.string.type ||
-                resource.type === MockAPI.symbol.type ||
-                resource.type === MockAPI.nulled.type ){
-                throw new Error('')
-            }
-
-
-            for(const [key, value] of Object.entries(resource)){                
-                endpoint[key] = value
-            }
-        })
+    static #typeOf(){
+        return 'SchemaType'
     }
 }
 
-const resourceLayers = [{
-    "user": {
-        "user_id": { "type": "number" },
-        "name": { "type":"string" }
+class MockIOFetcher extends Fetcher {
+    constructor(resourceSchemas=[]){
+        super(`https//${ENV.mockio.token}.mockapi.io`)
+        this.resources = {}
+
+        this.setEndpoints('/api/v1', resourceSchemas)
     }
-}, {
-    "task": {
-        "task_id": { "type": "number" },
-        "title": { "type":"string" }
+
+    setEndpoints(prefix, resourceSchemas){
+        let endpointString = '' + prefix
+        
+        resourceSchemas.forEach(resource => {
+            const endpoint = {}
+            this.#parseLayers(endpointString, resource, true)
+            this.resources.push(endpoint)
+        })
     }
-}]
+
+    #parseLayers(endpointString, layer, root=false){
+        for(const [key, value] of Object.entries(layer)){
+            if(SchemaType.typeMatches(value)){
+                return                
+            } else {
+                
+            }
+        }
+    }
+
+    async GET(endpoint, obj={headers:{},parameters:{}}){
+        return await super.GET(endpoint, obj)
+    }
+
+    async PUT(endpoint, body, obj={headers:{},parameters:{}, body:{}}){
+        return await super.PUT(endpoint, obj)
+    }
+
+    async POST(endpoint, body, obj={headers:{},parameters:{}, body:{}}){
+        return await super.POST(endpoint, obj)
+    }
+
+    async PATCH(endpoint, body, obj={headers:{},parameters:{}, body:{}}){
+        return await super.PATCH(endpoint, obj)
+    }
+
+    async DELETE(endpoint, obj={headers:{},parameters:{}, body:{}}){
+        return await super.DELETE(endpoint, obj)
+    }
+}
 
 
-export { MockAPI as MockAPIFetcher }
+
+export { MockIOFetcher }
