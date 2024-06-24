@@ -52,7 +52,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    static #options(method=Method.GET, headers={}, body=null){
+    static #options(method=Method.GET, headers=null, body=null){
     /**
      * @static @method
      * @param { string } method - the type of request to be made
