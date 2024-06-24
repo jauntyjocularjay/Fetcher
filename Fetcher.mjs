@@ -52,7 +52,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    static #options(method=Method.GET, headers=null, body=null){
+    options(method=Method.GET, headers=null, body=null){
     /**
      * @static @method
      * @param { string } method - the type of request to be made
@@ -86,7 +86,7 @@ class Fetcher {
         if(obj.parameters === undefined) obj.parameters = null
 
         const url = Fetcher.#constructURL(this.base_url, endpoint, obj.parameters)
-        const options = Fetcher.#options(method, obj.headers, obj.body)
+        const options = this.options(method, obj.headers, obj.body)
         const response = await fetch(url, options)
         return response.json()
     }
