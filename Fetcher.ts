@@ -8,15 +8,14 @@ class Method {
     static PUT = 'PUT' // Updates Data
     static PATCH = 'PATCH' // Updates Data
     static DELETE = 'DELETE' // Deletes Data
-    // static CONNECT = 'CONNECT' // Establishes a tunnel to the server
-    // static OPTIONS = 'OPTIONS' // Describes the communication options for the target resource
-    // static TRACE = 'TRACE' // Performs a message loop-back test along the path to the target resource
 }
 
 class Fetcher {
+    base_url: string
+    parameters: object
 
     /*** @todo test */
-    constructor(base_url='', parameters=null){
+    constructor(base_url='', parameters={}){
     /**
      * @constructor
      * @param { string } base_url - the base URL used to construct http requests
@@ -27,7 +26,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    static #parseURLParameters(parameters1, parameters2){
+    static #parseURLParameters(parameters1: object, parameters2: object){
     /**
      * @static @method
      * @param { Object } parameters - an object containing key-value pairs to be used as query parameters in a request
@@ -39,7 +38,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    static #constructURL(base_url, endpoint, parameters1, parameters2){
+    static #constructURL(base_url: string, endpoint: string, parameters1: object, parameters2: object){
     /**
      * @static @method
      * @param { string } base_url
@@ -47,6 +46,7 @@ class Fetcher {
      * @param { object } parameters - an object containing key-value pairs to be used in this specific request
      */
         let url = base_url + endpoint
+        // new check needed
         if(parameters2){ url += Fetcher.#parseURLParameters(parameters1, parameters2) }
         return url
     }
@@ -85,7 +85,7 @@ class Fetcher {
         if(obj.body === undefined) obj.body = null
         if(obj.parameters === undefined) obj.parameters = null
 
-        const url = Fetcher.#constructURL(this.base_url, endpoint, this.parameters, obj.parameters)
+        const url = Fetcher.#constructURL(this.base_url, endpoint, obj.parameters)
         const options = this.options(method, obj.headers, obj.body)
         const response = await fetch(url, options)
         return response.json()
@@ -127,6 +127,10 @@ class Fetcher {
     async DELETE(endpoint='', obj={ headers:{}, body: {}, parameters: {} }){
         return await this.request(Method.DELETE, endpoint, obj)
     }
+}
+
+class Body {
+
 }
 
 export {
