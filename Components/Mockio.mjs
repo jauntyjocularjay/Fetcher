@@ -5,41 +5,56 @@ import { ENV } from '../secret.mjs'
 
 
 
+class SchemaType {
+    static ARRAY = {"type": "array"}
+    static BIGINT = {"type": "bigint"}
+    static BOOLEAN = {"type": "boolean"}
+    static NUMBER = {"type": "number"}
+    static OBJECT = {"type": "object"}
+    static STRING = {"type": "string"}
+    static SYMBOL = {"type": "symbol"}
+    static NULL = {"type": "null"}
+}
+
 class MockIOFetcher extends Fetcher {
-    static TYPE = {
-        array: {"type": "array"},
-        bigint: {"type": "bigint"},
-        boolean: {"type": "boolean"},
-        number: {"type": "number"},
-        object: {"type": "object"},
-        string: {"type": "string"},
-        symbol: {"type": "symbol"},
-        nulled: {"type": "null"}
-    }
-
     constructor(resourceLayers=[]){
-        console.log(ENV.mockio.token)
         super(`https//${ENV.mockio.token}.mockapi.io`)
-        this.endpoints = {}
+        this.resources = []
 
-        this.setEndpoints(resourceLayers)
+        this.setEndpoints('/api/v1', resourceLayers)
     }
 
-    setEndpoints(resourceLayers){
+    setEndpoints(prefix, resourceLayers){
+        let endpointString = '' + prefix
+        
         resourceLayers.forEach(resource => {
-            if(typeof resource !== 'object'){ throw new TypeError('Resource-layers should contain a schema object') }
-            let endpoint = ''
-
-            for(let [key, value] of Object.entries(resource)){                
-                endpoint += `/${key}/:${key}_id`
-                this.endpoints[key] = endpoint
-                if(typeof value !== 'string'){
-                    key = value
-                }
-            }
+            const endpoint = {}
+            this.#parseLayers(endpoint, endpointString, resource, true)
+            this.resources.push(endpoint)
         })
     }
+
+    #parseLayers(endpoint, endpointString, layer, root=false){
+        for(const [key, value] of Object.entries(layer)){
+            if(typeof value === 'string'){
+                return
+            } else {
+                let newEndpointString
+                root
+                    ? newEndpointString = endpointString + `/${key}/:${key}_id`
+                    : newEndpointString = endpointString + `/${key}/:${key}`
+                this.#parseLayers(endpoint, newEndpointString, value)
+                endpoint[key] = newEndpointString
+            }
+        }
+    }
+
+
+
+
+
 }
+
 
 
 export { MockIOFetcher }

@@ -22,23 +22,22 @@ import { MockIOFetcher as MockIO } from '../Components/Mockio.mjs'
 
 
 
-const resourceLayers = [
-    {
-        "user": {
-            "user_id": { "type": "number" },
-            "name": {
-                "first": { "type":"string" },
-                "last": { "type":"string" }
-            }
-        }
-    }, {
-        "task": {
-            "task_id": { "type": "number" },
-            "title": { "type":"string" }
+const resourceLayers = [{
+    "user": {
+        // "user_id": { "type": "number" },
+        "name": {
+            "first": { "type":"string" },
+            "last": { "type":"string" }
         }
     }
-]
+},{
+    "task": {
+        // "task_id": { "type": "number" },
+        "title": { "type":"string" },
+        "completed": { "type":"boolean" }
+    }
+}]
 
 const m = new MockIO(resourceLayers)
-console.log(m.endpoints)
+console.log(m.resources)
 
