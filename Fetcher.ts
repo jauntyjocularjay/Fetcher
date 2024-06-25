@@ -52,7 +52,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    options(method=Method.GET, headers=null, body=null){
+    options(method=Method.GET, headers={}, body={}){
     /**
      * @static @method
      * @param { string } method - the type of request to be made
@@ -60,11 +60,12 @@ class Fetcher {
      * @param { object } body - an object containing the body of the request (if applicable)
      */
         const options = {
-            credentials: 'same-origin',
             headers: {
                 Accept: 'application/json, text/plain, */*',
+                credentials: 'same-origin',
                 'Content-Type': 'application/json'
             },
+            body: JSON.stringify(body),
             method: method
         }
 
@@ -74,38 +75,29 @@ class Fetcher {
             }
         }
 
-        if(body){ options.body = JSON.stringify(body) }
-
         return options
     }
 
     /*** @todo test */
-    async request(method, endpoint='', obj={headers:null, body:null, parameters: null}){
-        if(obj.headers === undefined) obj.headers = null
-        if(obj.body === undefined) obj.body = null
-        if(obj.parameters === undefined) obj.parameters = null
+    async request(method=Method.GET, endpoint='', obj={headers:{}, body:{}, parameters:{}}){
+        if(!obj.headers) obj.headers= {}
+        if(!obj.body) obj.body = {}
+        if(!obj.parameters) obj.parameters = {}
 
-        const url = Fetcher.#constructURL(this.base_url, endpoint, obj.parameters)
+        const url = Fetcher.#constructURL(this.base_url, endpoint, this.parameters, obj.parameters)
         const options = this.options(method, obj.headers, obj.body)
         const response = await fetch(url, options)
         return response.json()
     }
 
-    async GET(endpoint='', obj={ headers:{}, parameters:{} }){
-        if(obj.body === undefined || obj.body === null) {
-            return await this.request(Method.GET, endpoint, obj)
-        } else {
-            throw new Error('BodyError: GET requests DO NOT accept "obj.body"')
-        }
+    async GET(endpoint='', obj={ headers:{}, parameters:{}, body:{} }){
+        return await this.request(Method.GET, endpoint, obj)
     }
 
     /*** @todo test */
-    async HEAD(endpoint='', obj={ headers:{}, parameters:{} }){
-        if(obj.body === undefined || obj.body === null) {
-            return await this.request(Method.HEAD, endpoint, obj)
-        } else {
-            throw new Error('BodyError: HEAD requests DO NOT accept "obj.body"')
-        }
+    async HEAD(endpoint='', obj={ headers:{}, parameters:{}, body:{} }){
+        obj.body = {}  // strips away a body
+        return await this.request(Method.HEAD, endpoint, obj)
     }
 
     /*** @todo test */

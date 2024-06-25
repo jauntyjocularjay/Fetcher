@@ -62,9 +62,9 @@ class Fetcher {
      * @param { object } body - an object containing the body of the request (if applicable)
      */
         const options = {
-            credentials: 'same-origin',
             headers: {
                 Accept: 'application/json, text/plain, */*',
+                credentials: 'same-origin',
                 'Content-Type': 'application/json'
             },
             method: method
