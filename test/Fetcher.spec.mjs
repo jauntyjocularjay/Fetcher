@@ -75,6 +75,12 @@ function schemaTypeTests(){
             expectStringToInclude(`SchemaType.${type.type}.typeOf()`,'SchemaType', SchemaType.typeOf(), null)
         })
     })
+
+    describe('Schema.valueOf()', () => {
+        schemaTypes.forEach(type => {
+            expectStringToInclude(type.valueOf(), null, `SchemaType { type: "${type.type}" }`, null)
+        })
+    })
 }
 
 function constructorTests(){
@@ -154,8 +160,6 @@ async function deleteTests(){
     })
 }
 
-
-
 schemaTypeTests()
 constructorTests()
 await getTests()
@@ -163,4 +167,3 @@ await putTests()
 await patchTests()
 await postTests()
 await deleteTests()
-
