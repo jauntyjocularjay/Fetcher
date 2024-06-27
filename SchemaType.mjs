@@ -3,6 +3,8 @@ class SchemaType {
     static BIGINT = {"type": "bigint"}
     static BOOLEAN = {"type": "boolean"}
     static NUMBER = {"type": "number"}
+    static INTEGER = {"type": "integer"}
+    static DECIMAL = {"type": "decimal"}
     static OBJECT = {"type": "object"}
     static STRING = {"type": "string"}
     static SYMBOL = {"type": "symbol"}
@@ -10,18 +12,21 @@ class SchemaType {
 
     /** @todo test */
     static matches(obj){
-        const entries = Object.entries(obj)
+        const entry = Object.entries(obj)[0]
+
         if(
-            entries.length === 2 &&
-            entries[0] === 'type' && (
-            entries[1] === 'array' ||
-            entries[1] === 'bigint' ||
-            entries[1] === 'boolean' ||
-            entries[1] === 'number' ||
-            entries[1] === 'object' ||
-            entries[1] === 'string' ||
-            entries[1] === 'symbol' ||
-            entries[1] === 'null')
+            entry.length === 2 &&
+            entry[0] === 'type' && (
+            entry[1] === 'array' ||
+            entry[1] === 'bigint' ||
+            entry[1] === 'boolean' ||
+            entry[1] === 'number' ||
+            entry[1] === 'integer' ||
+            entry[1] === 'decimal' ||
+            entry[1] === 'object' ||
+            entry[1] === 'string' ||
+            entry[1] === 'symbol' ||
+            entry[1] === 'null')
         ){
             return true
         } else {
