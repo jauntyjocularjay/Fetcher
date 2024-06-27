@@ -1,4 +1,3 @@
-import { NotFoundError } from 'rxjs'
 import { SchemaType } from './SchemaType.mjs'
 
 class Method {
@@ -19,27 +18,14 @@ class Method {
 class Fetcher {
 
     /*** @todo test */
-    constructor(base_url='', obj={options:{}, parameters:{}}){
+    constructor(base_url='', parameters=null){
     /**
      * @constructor
      * @param { string } base_url - the base URL used to construct http requests
-     * @param { object } obj = {
-     *      @param { object } parameters - an object containing key-value pairs to be used as query parameters in EVERY request
-     *      @param { object } options - an object with headers, method, and other options for http requests
-     * }
+     * @param { object } parameters - an object containing key-value pairs to be used as query parameters in EVERY request
      */
         this.base_url = base_url
-        this.parameters = obj.parameters
-        this.options = {
-            ... obj.options,
-            ... {
-                headers: {
-                    Accept: 'application/json, text/plain, */*',
-                    credentials: 'same-origin',
-                    'Content-Type': 'application/json'
-                },
-            method: ''
-        }}
+        this.parameters = parameters
     }
 
     /*** @todo test */
@@ -75,7 +61,14 @@ class Fetcher {
      * @param { object } headers - an object containing key-value pairs to be used as headers in the request
      * @param { object } body - an object containing the body of the request (if applicable)
      */
-        const options = this.options
+        const options = {
+            headers: {
+                Accept: 'application/json, text/plain, */*',
+                credentials: 'same-origin',
+                'Content-Type': 'application/json'
+            },
+            method: method
+        }
 
         if(headers){
             for(const [key, value] of Object.entries(headers)){
@@ -100,23 +93,20 @@ class Fetcher {
         return response.json()
     }
 
-    /*** @todo test */
     async GET(endpoint='', obj={ headers:{}, parameters:{} }){
-        const method = Method.GET
         if(obj.body === undefined || obj.body === null) {
-            return await this.request(method, endpoint, obj)
+            return await this.request(Method.GET, endpoint, obj)
         } else {
-            throw new ParameterError(method)
+            throw new Error('BodyError: GET requests DO NOT accept "obj.body"')
         }
     }
 
     /*** @todo test */
     async HEAD(endpoint='', obj={ headers:{}, parameters:{} }){
-        const method = Method.HEAD
         if(obj.body === undefined || obj.body === null) {
-            return await this.request(method, endpoint, obj)
+            return await this.request(Method.HEAD, endpoint, obj)
         } else {
-            throw new ParameterError(method)
+            throw new Error('BodyError: HEAD requests DO NOT accept "obj.body"')
         }
     }
 
@@ -162,15 +152,15 @@ class Fetcher {
 
 }
 
-class StubError extends NotFoundError {
+class StubError extends Error {
     constructor(method){
-        throw new super(`Stub Error, ${method} request not supported`)
+        super(`Stub Error, ${method} request not supported`)
     }
 }
 
 class ParameterError extends Error {
     constructor(method){
-        throw new super(`Body: ${method} requests DO NOT accept "obj.body"`)
+        super(`Body: ${method} requests DO NOT accept "obj.body"`)
     }
 }
 

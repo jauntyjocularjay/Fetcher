@@ -58,11 +58,12 @@ async function getTests(){
 
 async function putTests(){
 
-    let updatedItem = await f.GET(merch_endpoint.item.replace(':item_id',48))
+    const itemID48 = merch_endpoint.item.replace(':item_id',48)
+    let updatedItem = await f.GET(itemID48)
     const newPrice = '4.80'
     updatedItem.price = newPrice
-    await f.PUT(merch_endpoint.item.replace(':item_id',48), {body: updatedItem})
-    updatedItem = await f.GET(merch_endpoint.item.replace(':item_id',48))
+    await f.PUT(itemID48, {body: updatedItem})
+    updatedItem = await f.GET(itemID48)
 
     describe('Fetcher.PUT testing', () => {
         expectValuesToEqual('subject price', updatedItem.price, 'item51priceUpdate price', newPrice)
@@ -105,7 +106,7 @@ async function deleteTests(){
     const merchAfter = await f.GET(merch_endpoint.item.replace(':item_id', ''))
 
     describe('Fetcher.DELETE testing', () => {
-        expectValuesToEqual('Length at the start: '+merchStart.length, merchStart.length, 'length at the end: '+merchAfter.length, merchAfter.length, false)
+        expectValuesToEqual(`Length at the start: ${merchStart.length}`, merchStart.length, `length at the end: ${merchAfter.length}`, merchAfter.length, false)
     })
 }
 
