@@ -29,7 +29,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    static #constructURL(base_url, endpoint, parameters1, parameters2){
+    #constructURL(base_url, endpoint, parameters2){
     /**
      * @static @method
      * @param { string } base_url
@@ -37,7 +37,7 @@ class Fetcher {
      * @param { object } parameters - an object containing key-value pairs to be used in this specific request
      */
         let url = base_url + endpoint
-        if(parameters2){ url += Fetcher.#parseURLParameters(parameters1, parameters2) }
+        if(parameters2){ url += Fetcher.#parseURLParameters(this.parameters, parameters2) }
         return url
     }
 
@@ -75,7 +75,7 @@ class Fetcher {
         if(obj.body === undefined) obj.body = null
         if(obj.parameters === undefined) obj.parameters = null
 
-        const url = Fetcher.#constructURL(this.base_url, endpoint, this.parameters, obj.parameters)
+        const url = this.#constructURL(this.base_url, endpoint, obj.parameters)
         const options = this.options(method, obj.headers, obj.body)
         const response = await fetch(url, options)
         return response.json()
