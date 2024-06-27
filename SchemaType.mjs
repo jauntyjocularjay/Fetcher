@@ -10,7 +10,6 @@ class SchemaType {
     static SYMBOL = {"type": "symbol"}
     static NULL = {"type": "null"}
 
-    /** @todo test */
     static matches(obj){
         const entry = Object.entries(obj)[0]
 
