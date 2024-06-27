@@ -39,5 +39,5 @@
 // }
 
 // const m = new MockIO(resourceLayers)
-// console.log(m.resources)
+// console.log('MockIO.resources', m.resources)
 

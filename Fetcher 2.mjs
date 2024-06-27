@@ -1,12 +1,14 @@
-import { SchemaType } from './SchemaType.mjs'
 import { Method } from './Method.mjs'
 
 
 
+
 class Fetcher {
+    base_url: string
+    parameters: object
 
     /*** @todo test */
-    constructor(base_url='', parameters=null){
+    constructor(base_url='', parameters={}){
     /**
      * @constructor
      * @param { string } base_url - the base URL used to construct http requests
@@ -17,7 +19,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    static #parseURLParameters(parameters1, parameters2){
+    static #parseURLParameters(parameters1: object, parameters2: object){
     /**
      * @static @method
      * @param { Object } parameters - an object containing key-value pairs to be used as query parameters in a request
@@ -29,7 +31,7 @@ class Fetcher {
     }
 
     /*** @todo test */
-    static #constructURL(base_url, endpoint, parameters1, parameters2){
+    static #constructURL(base_url: string, endpoint: string, parameters1: object, parameters2: object){
     /**
      * @static @method
      * @param { string } base_url
@@ -37,12 +39,13 @@ class Fetcher {
      * @param { object } parameters - an object containing key-value pairs to be used in this specific request
      */
         let url = base_url + endpoint
+        // new check needed
         if(parameters2){ url += Fetcher.#parseURLParameters(parameters1, parameters2) }
         return url
     }
 
     /*** @todo test */
-    options(method=Method.GET, headers=null, body=null){
+    options(method=Method.GET, headers={}, body={}){
     /**
      * @static @method
      * @param { string } method - the type of request to be made
@@ -55,6 +58,7 @@ class Fetcher {
                 credentials: 'same-origin',
                 'Content-Type': 'application/json'
             },
+            body: JSON.stringify(body),
             method: method
         }
 
@@ -64,16 +68,14 @@ class Fetcher {
             }
         }
 
-        if(body){ options.body = JSON.stringify(body) }
-
         return options
     }
 
     /*** @todo test */
-    async request(method, endpoint='', obj={headers:null, body:null, parameters: null}){
-        if(obj.headers === undefined) obj.headers = null
-        if(obj.body === undefined) obj.body = null
-        if(obj.parameters === undefined) obj.parameters = null
+    async request(method=Method.GET, endpoint='', obj={headers:{}, body:{}, parameters:{}}){
+        if(!obj.headers) obj.headers= {}
+        if(!obj.body) obj.body = {}
+        if(!obj.parameters) obj.parameters = {}
 
         const url = Fetcher.#constructURL(this.base_url, endpoint, this.parameters, obj.parameters)
         const options = this.options(method, obj.headers, obj.body)
@@ -81,21 +83,14 @@ class Fetcher {
         return response.json()
     }
 
-    async GET(endpoint='', obj={ headers:{}, parameters:{} }){
-        if(obj.body === undefined || obj.body === null) {
-            return await this.request(Method.GET, endpoint, obj)
-        } else {
-            throw new Error('BodyError: GET requests DO NOT accept "obj.body"')
-        }
+    async GET(endpoint='', obj={ headers:{}, parameters:{}, body:{} }){
+        return await this.request(Method.GET, endpoint, obj)
     }
 
     /*** @todo test */
-    async HEAD(endpoint='', obj={ headers:{}, parameters:{} }){
-        if(obj.body === undefined || obj.body === null) {
-            return await this.request(Method.HEAD, endpoint, obj)
-        } else {
-            throw new Error('BodyError: HEAD requests DO NOT accept "obj.body"')
-        }
+    async HEAD(endpoint='', obj={ headers:{}, parameters:{}, body:{} }){
+        obj.body = {}  // strips away a body
+        return await this.request(Method.HEAD, endpoint, obj)
     }
 
     /*** @todo test */
@@ -117,42 +112,12 @@ class Fetcher {
     async DELETE(endpoint='', obj={ headers:{}, body: {}, parameters: {} }){
         return await this.request(Method.DELETE, endpoint, obj)
     }
-
-    /*** @todo test */
-    async CONNECT(endpoint='', obj= { headers:{}, parameters: {}}){
-        const method = Method.CONNECT
-        if(obj.body === undefined || obj.body === null) {
-            return await this.request(method, endpoint, obj)
-        } else {
-            throw new ParameterError(method)
-        }
-    }
-
-    /*** @todo test */
-    async OPTIONS(){
-        throw new StubError(Method.OPTIONS)
-    }
-
-    /*** @todo test */
-    async TRACE(){
-        throw new StubError(Method.TRACE)
-    }
-
 }
 
-class StubError extends Error {
-    constructor(method){
-        super(`Stub Error, ${method} request not supported yet`)
-    }
-}
+class Body {
 
-class ParameterError extends Error {
-    constructor(method){
-        super(`Body: ${method} requests DO NOT accept "obj.body"`)
-    }
 }
 
 export {
-    Fetcher,
-    SchemaType
+    Fetcher
 }
