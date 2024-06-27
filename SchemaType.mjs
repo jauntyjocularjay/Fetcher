@@ -1,21 +1,59 @@
 class SchemaType {
-    static ARRAY = {"type": "array"}
-    static BIGINT = {"type": "bigint"}
-    static BOOLEAN = {"type": "boolean"}
-    static NUMBER = {"type": "number"}
-    static INTEGER = {"type": "integer"}
-    static DECIMAL = {"type": "decimal"}
-    static OBJECT = {"type": "object"}
-    static STRING = {"type": "string"}
-    static SYMBOL = {"type": "symbol"}
-    static NULL = {"type": "null"}
+    static ARRAY = {
+        type: "array",
+        typeOf: () => { SchemaType.typeOf()},
+        valueOf: () => { return SchemaType.valueOf(SchemaType.ARRAY) }
+    }
+    static BIGINT = {
+        type: "bigint",
+        typeOf: () => { SchemaType.typeOf() },
+        valueOf: () => { return SchemaType.valueOf(SchemaType.BIGINT) }
+    }
+    static BOOLEAN = {
+        type: "boolean",
+        typeOf: () => { SchemaType.typeOf() },
+        valueOf: () => { return SchemaType.valueOf(SchemaType.BOOLEAN) }
+    }
+    static NUMBER = {
+        type: "number",
+        typeOf: () => { SchemaType.typeOf() },
+        valueOf: () => { return SchemaType.valueOf(SchemaType.NUMBER) }
+    }
+    static INTEGER = {
+        type: "integer",
+        typeOf: () => { SchemaType.typeOf() },
+        valueOf: () => { return SchemaType.valueOf(SchemaType.INTEGER) }
+    }
+    static DECIMAL = {
+        type: "decimal",
+        typeOf: () => { SchemaType.typeOf() },
+        valueOf: () => { return SchemaType.valueOf(SchemaType.DECIMAL) }
+    }
+    static OBJECT = {
+        type: "object",
+        typeOf: () => { SchemaType.typeOf() },
+        valueOf: () => { return SchemaType.valueOf(SchemaType.OBJECT) }
+    }
+    static STRING = {
+        type: "string",
+        typeOf: () => { SchemaType.typeOf() },
+        valueOf: () => { return SchemaType.valueOf(SchemaType.STRING) }
+    }
+    static SYMBOL = {
+        type: "symbol",
+        typeOf: () => { SchemaType.typeOf() },
+        valueOf: () => { return SchemaType.valueOf(SchemaType.SYMBOL) }
+    }
+    static NULL = {
+        type: "null",
+        typeOf: () => { SchemaType.typeOf() },
+        valueOf: () => { return SchemaType.valueOf(SchemaType.NULL) }
+    }
 
-    /** @todo test */
     static matches(obj){
         const entry = Object.entries(obj)[0]
 
-        if(
-            entry.length === 2 &&
+        if( entry.length === 2 &&
             entry[0] === 'type' && (
             entry[1] === 'array' ||
             entry[1] === 'bigint' ||
@@ -34,9 +72,12 @@ class SchemaType {
         }
     }
 
-    /** @todo test */
-    typeOf(){
+    static typeOf(){
         return 'SchemaType'
+    }
+
+    static valueOf(schematype){
+        return `${SchemaType.typeOf()} { type: "${schematype.type}" }` 
     }
 }
 

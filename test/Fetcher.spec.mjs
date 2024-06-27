@@ -35,28 +35,51 @@ const task_endpoint = {
     all_tasks: '/api/v1/tasks',
     task: '/api/v1/tasks/:task_id'
 }
+const schemaTypes = [
+    SchemaType.ARRAY,
+    SchemaType.BIGINT,
+    SchemaType.BOOLEAN,
+    SchemaType.OBJECT,
+    SchemaType.NUMBER,
+    SchemaType.INTEGER,
+    SchemaType.DECIMAL,
+    SchemaType.STRING,
+    SchemaType.SYMBOL,
+    SchemaType.NULL
+]
+const types = [
+    { type: 'array' },
+    { type: 'bigint' },
+    { type: 'boolean' },
+    { type: 'object' },
+    { type: 'number' },
+    { type: 'integer' },
+    { type: 'decimal' },
+    { type: 'string' },
+    { type: 'symbol' },
+    { type: 'null' }
+]
+const failvalue = {type: "unicorn"}
 
 function schemaTypeTests(){
     describe('SchemaType.matches() value verification and is failable', () => {
-        const types = [
-            { type: 'array' },
-            { type: 'bigint' },
-            { type: 'boolean' },
-            { type: 'object' },
-            { type: 'number' },
-            { type: 'integer' },
-            { type: 'decimal' },
-            { type: 'string' },
-            { type: 'symbol' },
-            { type: 'null' }
-        ]
-
         types.forEach(type => {
             expectToBeTrue(`SchemaType.matches({type: '${type.type}'})`, SchemaType.matches(type))
         })
 
-        const failvalue = {type: "unicorn"}
         expectToBeTrue(`SchemaType.matches({type: '${failvalue.type}'})`, SchemaType.matches(failvalue), false)
+    })
+
+    describe('SchemaType.typeOf() is SchemaType', () => {
+        schemaTypes.forEach(type => {
+            expectStringToInclude(`SchemaType.${type.type}.typeOf()`,'SchemaType', SchemaType.typeOf(), null)
+        })
+    })
+
+    describe('Schema.valueOf()', () => {
+        schemaTypes.forEach(type => {
+            expectStringToInclude(type.valueOf(), null, `SchemaType { type: "${type.type}" }`, null)
+        })
     })
 }
 
@@ -137,8 +160,6 @@ async function deleteTests(){
     })
 }
 
-
-
 schemaTypeTests()
 constructorTests()
 await getTests()
@@ -146,4 +167,3 @@ await putTests()
 await patchTests()
 await postTests()
 await deleteTests()
-
