@@ -17,7 +17,10 @@ import {
     should
 } from 'chai'
 import { ENV } from '../secret.mjs'
-import { Fetcher } from '../Fetcher.mjs'
+import {
+    Fetcher,
+    SchemaType
+} from '../Fetcher.mjs'
 
 
 
@@ -33,11 +36,35 @@ const task_endpoint = {
     task: '/api/v1/tasks/:task_id'
 }
 
+function schemaTypeTests(){
+    describe('SchemaType.matches() value verification and is failable', () => {
+        const types = [
+            { type: 'array' },
+            { type: 'bigint' },
+            { type: 'boolean' },
+            { type: 'object' },
+            { type: 'number' },
+            { type: 'integer' },
+            { type: 'decimal' },
+            { type: 'string' },
+            { type: 'symbol' },
+            { type: 'null' }
+        ]
+
+        types.forEach(type => {
+            expectToBeTrue(`SchemaType.matches({type: '${type.type}'})`, SchemaType.matches(type))
+        })
+
+        const failvalue = {type: "unicorn"}
+        expectToBeTrue(`SchemaType.matches({type: '${failvalue.type}'})`, SchemaType.matches(failvalue), false)
+    })
+}
+
 function constructorTests(){
 
     describe('Fetcher constructor testing', () => {
         expectStringToInclude('f.base_url', f.base_url, 'https://', 'https://')
-        expectStringToInclude('f.base_url', f.base_url, 'mockapi.io', 'mockapi.io')
+        expectStringToInclude('f.base_url', f.base_url, '.mockapi.io', '.mockapi.io')
     })
 }
 
@@ -58,11 +85,12 @@ async function getTests(){
 
 async function putTests(){
 
-    let updatedItem = await f.GET(merch_endpoint.item.replace(':item_id',48))
+    const itemID48 = merch_endpoint.item.replace(':item_id',48)
+    let updatedItem = await f.GET(itemID48)
     const newPrice = '4.80'
     updatedItem.price = newPrice
-    await f.PUT(merch_endpoint.item.replace(':item_id',48), {body: updatedItem})
-    updatedItem = await f.GET(merch_endpoint.item.replace(':item_id',48))
+    await f.PUT(itemID48, {body: updatedItem})
+    updatedItem = await f.GET(itemID48)
 
     describe('Fetcher.PUT testing', () => {
         expectValuesToEqual('subject price', updatedItem.price, 'item51priceUpdate price', newPrice)
@@ -105,11 +133,13 @@ async function deleteTests(){
     const merchAfter = await f.GET(merch_endpoint.item.replace(':item_id', ''))
 
     describe('Fetcher.DELETE testing', () => {
-        expectValuesToEqual('Length at the start: '+merchStart.length, merchStart.length, 'length at the end: '+merchAfter.length, merchAfter.length, false)
+        expectValuesToEqual(`Length at the start: ${merchStart.length}`, merchStart.length, `length at the end: ${merchAfter.length}`, merchAfter.length, false)
     })
 }
 
 
+
+schemaTypeTests()
 constructorTests()
 await getTests()
 await putTests()
