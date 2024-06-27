@@ -1,3 +1,5 @@
+import { SchemaType } from './SchemaType.mjs'
+
 class Method {
 /**
  * @class - Method is an enum class that defines the valid types of requests supported by Fetcher.
@@ -8,9 +10,9 @@ class Method {
     static PUT = 'PUT' // Updates Data
     static PATCH = 'PATCH' // Updates Data
     static DELETE = 'DELETE' // Deletes Data
-    // static CONNECT = 'CONNECT' // Establishes a tunnel to the server
-    // static OPTIONS = 'OPTIONS' // Describes the communication options for the target resource
-    // static TRACE = 'TRACE' // Performs a message loop-back test along the path to the target resource
+    static CONNECT = 'CONNECT' // Establishes a tunnel to the server
+    static OPTIONS = 'OPTIONS' // Describes the communication options for the target resource
+    static TRACE = 'TRACE' // Performs a message loop-back test along the path to the target resource
 }
 
 class Fetcher {
@@ -27,19 +29,19 @@ class Fetcher {
     }
 
     /*** @todo test */
-    static #parseURLParameters(parameters){
+    static #parseURLParameters(parameters1, parameters2){
     /**
      * @static @method
      * @param { Object } parameters - an object containing key-value pairs to be used as query parameters in a request
      * @returns - a string of properly formatted query parameters for appending to the URL
      */
-        const mergedParameters = {... this.parameters, ...parameters}
+        const mergedParameters = {... parameters1, ...parameters2}
         const queryStr = Object.entries(mergedParameters).map(([key, value]) => `${key}=${value}`).join('&')
         return `?${queryStr}`
     }
 
     /*** @todo test */
-    static #constructURL(base_url, endpoint, parameters){
+    static #constructURL(base_url, endpoint, parameters1, parameters2){
     /**
      * @static @method
      * @param { string } base_url
@@ -47,12 +49,12 @@ class Fetcher {
      * @param { object } parameters - an object containing key-value pairs to be used in this specific request
      */
         let url = base_url + endpoint
-        if(parameters){ url += Fetcher.#parseURLParameters(this.parameters, parameters) }
+        if(parameters2){ url += Fetcher.#parseURLParameters(parameters1, parameters2) }
         return url
     }
 
     /*** @todo test */
-    static #options(method=Method.GET, headers=null, body=null){
+    options(method=Method.GET, headers=null, body=null){
     /**
      * @static @method
      * @param { string } method - the type of request to be made
@@ -60,9 +62,9 @@ class Fetcher {
      * @param { object } body - an object containing the body of the request (if applicable)
      */
         const options = {
-            credentials: 'same-origin',
             headers: {
                 Accept: 'application/json, text/plain, */*',
+                credentials: 'same-origin',
                 'Content-Type': 'application/json'
             },
             method: method
@@ -85,8 +87,8 @@ class Fetcher {
         if(obj.body === undefined) obj.body = null
         if(obj.parameters === undefined) obj.parameters = null
 
-        const url = Fetcher.#constructURL(this.base_url, endpoint, obj.parameters)
-        const options = Fetcher.#options(method, obj.headers, obj.body)
+        const url = Fetcher.#constructURL(this.base_url, endpoint, this.parameters, obj.parameters)
+        const options = this.options(method, obj.headers, obj.body)
         const response = await fetch(url, options)
         return response.json()
     }
@@ -127,8 +129,42 @@ class Fetcher {
     async DELETE(endpoint='', obj={ headers:{}, body: {}, parameters: {} }){
         return await this.request(Method.DELETE, endpoint, obj)
     }
+
+    /*** @todo test */
+    async CONNECT(endpoint='', obj= { headers:{}, parameters: {}}){
+        const method = Method.CONNECT
+        if(obj.body === undefined || obj.body === null) {
+            return await this.request(method, endpoint, obj)
+        } else {
+            throw new ParameterError(method)
+        }
+    }
+
+    /*** @todo test */
+    async OPTIONS(){
+        throw new StubError(Method.OPTIONS)
+    }
+
+    /*** @todo test */
+    async TRACE(){
+        throw new StubError(Method.TRACE)
+    }
+
+}
+
+class StubError extends Error {
+    constructor(method){
+        super(`Stub Error, ${method} request not supported`)
+    }
+}
+
+class ParameterError extends Error {
+    constructor(method){
+        super(`Body: ${method} requests DO NOT accept "obj.body"`)
+    }
 }
 
 export {
-    Fetcher
+    Fetcher,
+    SchemaType
 }
