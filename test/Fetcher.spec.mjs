@@ -1,3 +1,4 @@
+import { ENV } from '../secret.mjs'
 import {
     expectToBeTrue,
     expectValuesToMatch,
@@ -12,11 +13,6 @@ import {
     throwsError,
     expectConstructorToThrowError
 } from '../module/chaitests/Chai.mjs'
-import {
-    expect,
-    should
-} from 'chai'
-import { ENV } from '../secret.mjs'
 import {
     Fetcher,
     SchemaType
