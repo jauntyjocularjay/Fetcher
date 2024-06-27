@@ -58,6 +58,7 @@ const types = [
 const failvalue = {type: "unicorn"}
 
 function schemaTypeTests(){
+
     describe('SchemaType.matches() value verification and is failable', () => {
         types.forEach(type => {
             expectToBeTrue(`SchemaType.matches({type: '${type.type}'})`, SchemaType.matches(type))
@@ -77,6 +78,7 @@ function schemaTypeTests(){
             expectStringToInclude(type.valueOf(), null, `SchemaType { type: "${type.type}" }`, null)
         })
     })
+
 }
 
 function constructorTests(){
@@ -85,9 +87,11 @@ function constructorTests(){
         expectStringToInclude('f.base_url', f.base_url, 'https://', 'https://')
         expectStringToInclude('f.base_url', f.base_url, '.mockapi.io', '.mockapi.io')
     })
+
 }
 
 async function getTests(){
+
     const task1Subject = await f.GET(task_endpoint.task.replace(':task_id',1))
     const task1Target = {
         "completed": false,
@@ -100,6 +104,7 @@ async function getTests(){
         expectValuesToEqual('subject title', task1Subject.title, 'target title', task1Target.title)
         expectValuesToEqual('subject id', task1Subject.id, 'target id', task1Target.id)
     })
+
 }
 
 async function putTests(){
@@ -114,6 +119,7 @@ async function putTests(){
     describe('Fetcher.PUT testing', () => {
         expectValuesToEqual('subject price', updatedItem.price, 'item51priceUpdate price', newPrice)
     })
+
 }
 
 async function patchTests(){
@@ -127,9 +133,11 @@ async function patchTests(){
     describe('Fetcher.PATCH testing', () => {
         expectValuesToEqual('subject price', updatedItem.price, 'newPrice', newPrice)
     })
+
 }
 
 async function postTests(){
+
     const itemToAdd = {
         "price": "3.14",
         "name": "Strawberry Rhubarb Pi",
@@ -147,6 +155,7 @@ async function postTests(){
 }
 
 async function deleteTests(){
+
     const merchStart = await f.GET(merch_endpoint.item.replace(':item_id', ''))
     await f.DELETE(merch_endpoint.item.replace(':item_id', merchStart.length))
     const merchAfter = await f.GET(merch_endpoint.item.replace(':item_id', ''))
@@ -154,6 +163,7 @@ async function deleteTests(){
     describe('Fetcher.DELETE testing', () => {
         expectValuesToEqual(`Length at the start: ${merchStart.length}`, merchStart.length, `length at the end: ${merchAfter.length}`, merchAfter.length, false)
     })
+
 }
 
 schemaTypeTests()
