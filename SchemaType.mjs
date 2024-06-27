@@ -1,14 +1,44 @@
 class SchemaType {
-    static ARRAY = {"type": "array"}
-    static BIGINT = {"type": "bigint"}
-    static BOOLEAN = {"type": "boolean"}
-    static NUMBER = {"type": "number"}
-    static INTEGER = {"type": "integer"}
-    static DECIMAL = {"type": "decimal"}
-    static OBJECT = {"type": "object"}
-    static STRING = {"type": "string"}
-    static SYMBOL = {"type": "symbol"}
-    static NULL = {"type": "null"}
+    static ARRAY = {
+        type: "array",
+        typeOf: () => { SchemaType.typeOf() }
+    }
+    static BIGINT = {
+        type: "bigint",
+        typeOf: () => { SchemaType.typeOf() }
+    }
+    static BOOLEAN = {
+        type: "boolean",
+        typeOf: () => { SchemaType.typeOf() }
+    }
+    static NUMBER = {
+        type: "number",
+        typeOf: () => { SchemaType.typeOf() }
+    }
+    static INTEGER = {
+        type: "integer",
+        typeOf: () => { SchemaType.typeOf() }
+    }
+    static DECIMAL = {
+        type: "decimal",
+        typeOf: () => { SchemaType.typeOf() }
+    }
+    static OBJECT = {
+        type: "object",
+        typeOf: () => { SchemaType.typeOf() }
+    }
+    static STRING = {
+        type: "string",
+        typeOf: () => { SchemaType.typeOf() }
+    }
+    static SYMBOL = {
+        type: "symbol",
+        typeOf: () => { SchemaType.typeOf() }
+    }
+    static NULL = {
+        type: "null",
+        typeOf: () => { SchemaType.typeOf() }
+    }
 
     static matches(obj){
         const entry = Object.entries(obj)[0]
@@ -34,7 +64,7 @@ class SchemaType {
     }
 
     /** @todo test */
-    typeOf(){
+    static typeOf(){
         return 'SchemaType'
     }
 }

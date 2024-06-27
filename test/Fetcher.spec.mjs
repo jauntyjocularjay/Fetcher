@@ -35,6 +35,18 @@ const task_endpoint = {
     all_tasks: '/api/v1/tasks',
     task: '/api/v1/tasks/:task_id'
 }
+const schemaTypes = [
+    SchemaType.ARRAY,
+    SchemaType.BIGINT,
+    SchemaType.BOOLEAN,
+    SchemaType.OBJECT,
+    SchemaType.NUMBER,
+    SchemaType.INTEGER,
+    SchemaType.DECIMAL,
+    SchemaType.STRING,
+    SchemaType.SYMBOL,
+    SchemaType.NULL
+]
 const types = [
     { type: 'array' },
     { type: 'bigint' },
@@ -48,7 +60,6 @@ const types = [
     { type: 'null' }
 ]
 const failvalue = {type: "unicorn"}
-const schemaType = new SchemaType()
 
 function schemaTypeTests(){
     describe('SchemaType.matches() value verification and is failable', () => {
@@ -59,8 +70,10 @@ function schemaTypeTests(){
         expectToBeTrue(`SchemaType.matches({type: '${failvalue.type}'})`, SchemaType.matches(failvalue), false)
     })
 
-    describe('Type string is SchemaType', () => {
-        expectStringToInclude('SchemaType', null, schemaType.typeOf(), null)
+    describe('SchemaType.typeOf() is SchemaType', () => {
+        schemaTypes.forEach(type => {
+            expectStringToInclude(`SchemaType.${type.type}.typeOf()`,'SchemaType', SchemaType.typeOf(), null)
+        })
     })
 }
 
