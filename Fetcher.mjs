@@ -17,13 +17,13 @@ class Fetcher {
     }
 
     /*** @todo test */
-    static #parseURLParameters(parameters1, parameters2){
+    #parseURLParameters(parameters2){
     /**
      * @static @method
      * @param { Object } parameters - an object containing key-value pairs to be used as query parameters in a request
      * @returns - a string of properly formatted query parameters for appending to the URL
      */
-        const mergedParameters = {... parameters1, ...parameters2}
+        const mergedParameters = {... this.parameters, ...parameters2}
         const queryStr = Object.entries(mergedParameters).map(([key, value]) => `${key}=${value}`).join('&')
         return `?${queryStr}`
     }
@@ -37,7 +37,7 @@ class Fetcher {
      * @param { object } parameters - an object containing key-value pairs to be used in this specific request
      */
         let url = base_url + endpoint
-        if(parameters2){ url += Fetcher.#parseURLParameters(this.parameters, parameters2) }
+        if(parameters2){ url += this.#parseURLParameters(parameters2) }
         return url
     }
 
