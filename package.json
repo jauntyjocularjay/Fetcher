@@ -5,6 +5,7 @@
     "name": "fetcher",
     "description": "An ES6, fetch library to ease the use of JSON APIs",
     "version": "0.1.0",
+    "type": "module",
     "main": "Fetcher.mjs",
     "directories": {
         "test": "test"
