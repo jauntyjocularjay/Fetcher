@@ -107,9 +107,6 @@ class Headers {
     Host: string
 
     constructor(){
-        // return new Record({
-
-        // })
         this.Accept = 'application/json, text/plain, */*'
         this.credentials = 'same-origin'
         this['Content-Type'] = 'application/json'
@@ -145,7 +142,7 @@ class Fetcher {
     parameters: object
 
     /*** @todo test */
-    constructor(base_url:string, parameters: object){
+    constructor(base_url:string){
     /**
      * @constructor
      * @param { string } base_url - the base URL used to construct http requests
