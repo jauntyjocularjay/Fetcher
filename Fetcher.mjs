@@ -4,6 +4,54 @@ import { Method } from './Method.mjs'
 
 
 class Fetcher {
+    static headers = {
+        Accept: [
+            { Accept: SchemaType.STRING },
+            { Accept: 'application/json, text/plain, */*' },
+            { Accept: 'application/json' },
+            { Accept: 'application/json; q=1.0' },
+            { Accept: 'text/html; q=1.0' },
+            { Accept: 'text/*; q=0.8' },
+            { Accept: 'image/gif; q=0.6' },
+            { Accept: 'image/jpeg; q=0.6' },
+            { Accept: 'image/*; q=0.5' },
+            { Accept: '*/*; q=0.1' }
+        ],
+        'Accept-Language': [
+            { 'Accept-Language': SchemaType.STRING },
+            { 'Accept-Language': 'en' },
+            { 'Accept-Language': 'en; q=1.0, es; q=0.9, fr; q=0.6' },
+            { 'Accept-Language': 'en; q=1.0, es; q=0.9, fr; q=0.6, de; q=0.5' }
+        ],
+        Authorization: [
+            { Authorization: SchemaType.STRING },
+            { Authorization: 'Bearer xxx' }
+        ],
+        'Content-Length': [ { 'Content-Length': SchemaType.NUMBER } ],
+        'Content-Type': [
+            { 'Content-Type': SchemaType.STRING },
+            { 'Content-Type': 'application/json' },
+            { 'Content-Type': 'application/pdf' },
+            { 'Content-Type': 'application/xml' },
+            { 'Content-Type': 'application/zip' },
+            { 'Content-Type': 'image/png' },
+            { 'Content-Type': 'text/plain' },
+            { 'Content-Type': 'text/css' },
+            { 'Content-Type': 'text/csv' },
+            { 'Content-Type': 'text/html' },
+            { 'Content-Type': 'text/javascript' },
+            { 'Content-Type': 'text/xml' }
+        ],
+        credentials: [
+            { credentials: SchemaType.STRING},
+            { credentials: 'same-origin'}
+        ],
+        Host: [
+            { Host: SchemaType.STRING },
+            { Host: 'https://www.secure.com' },
+            { Host: 'http://www.unsecure.com' }
+        ]
+    }
 
     /*** @todo test */
     constructor(base_url='', parameters=null){
@@ -14,6 +62,7 @@ class Fetcher {
      */
         this.base_url = base_url
         this.parameters = parameters
+        Object.freeze(Fetcher.headers)
     }
 
     /*** @todo test */
@@ -154,5 +203,6 @@ class ParameterError extends Error {
 
 export {
     Fetcher,
+    Method,
     SchemaType
 }
