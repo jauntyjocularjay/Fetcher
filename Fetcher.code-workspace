@@ -4,7 +4,10 @@
 			"path": "."
 		},
 		{
-			"path": "module/schemajs"
+			"path": "module/chaitests"
+		},
+		{
+			"path": "git"
 		}
 	],
 	"settings": {}
