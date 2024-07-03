@@ -3,55 +3,57 @@ import { Method } from './Method.mjs'
 
 
 
+const headers = Object.freeze({
+    Accept: [
+        { Accept: SchemaType.STRING },
+        { Accept: 'application/json, text/plain, */*' },
+        { Accept: 'application/json' },
+        { Accept: 'application/json; q=1.0' },
+        { Accept: 'text/html; q=1.0' },
+        { Accept: 'text/*; q=0.8' },
+        { Accept: 'image/gif; q=0.6' },
+        { Accept: 'image/jpeg; q=0.6' },
+        { Accept: 'image/*; q=0.5' },
+        { Accept: '*/*; q=0.1' }
+    ],
+    'Accept-Language': [
+        { 'Accept-Language': SchemaType.STRING },
+        { 'Accept-Language': 'en' },
+        { 'Accept-Language': 'en; q=1.0, es; q=0.9, fr; q=0.6' },
+        { 'Accept-Language': 'en; q=1.0, es; q=0.9, fr; q=0.6, de; q=0.5' }
+    ],
+    Authorization: [
+        { Authorization: SchemaType.STRING },
+        { Authorization: 'Bearer xxx' }
+    ],
+    'Content-Length': [ { 'Content-Length': SchemaType.NUMBER } ],
+    'Content-Type': [
+        { 'Content-Type': SchemaType.STRING },
+        { 'Content-Type': 'application/json' },
+        { 'Content-Type': 'application/pdf' },
+        { 'Content-Type': 'application/xml' },
+        { 'Content-Type': 'application/zip' },
+        { 'Content-Type': 'image/png' },
+        { 'Content-Type': 'text/plain' },
+        { 'Content-Type': 'text/css' },
+        { 'Content-Type': 'text/csv' },
+        { 'Content-Type': 'text/html' },
+        { 'Content-Type': 'text/javascript' },
+        { 'Content-Type': 'text/xml' }
+    ],
+    credentials: [
+        { credentials: SchemaType.STRING},
+        { credentials: 'same-origin'}
+    ],
+    Host: [
+        { Host: SchemaType.STRING },
+        { Host: 'https://www.secure.com' },
+        { Host: 'http://www.unsecure.com' }
+    ]
+})
+// Object.freeze(headers)
+
 class Fetcher {
-    static headers = {
-        Accept: [
-            { Accept: SchemaType.STRING },
-            { Accept: 'application/json, text/plain, */*' },
-            { Accept: 'application/json' },
-            { Accept: 'application/json; q=1.0' },
-            { Accept: 'text/html; q=1.0' },
-            { Accept: 'text/*; q=0.8' },
-            { Accept: 'image/gif; q=0.6' },
-            { Accept: 'image/jpeg; q=0.6' },
-            { Accept: 'image/*; q=0.5' },
-            { Accept: '*/*; q=0.1' }
-        ],
-        'Accept-Language': [
-            { 'Accept-Language': SchemaType.STRING },
-            { 'Accept-Language': 'en' },
-            { 'Accept-Language': 'en; q=1.0, es; q=0.9, fr; q=0.6' },
-            { 'Accept-Language': 'en; q=1.0, es; q=0.9, fr; q=0.6, de; q=0.5' }
-        ],
-        Authorization: [
-            { Authorization: SchemaType.STRING },
-            { Authorization: 'Bearer xxx' }
-        ],
-        'Content-Length': [ { 'Content-Length': SchemaType.NUMBER } ],
-        'Content-Type': [
-            { 'Content-Type': SchemaType.STRING },
-            { 'Content-Type': 'application/json' },
-            { 'Content-Type': 'application/pdf' },
-            { 'Content-Type': 'application/xml' },
-            { 'Content-Type': 'application/zip' },
-            { 'Content-Type': 'image/png' },
-            { 'Content-Type': 'text/plain' },
-            { 'Content-Type': 'text/css' },
-            { 'Content-Type': 'text/csv' },
-            { 'Content-Type': 'text/html' },
-            { 'Content-Type': 'text/javascript' },
-            { 'Content-Type': 'text/xml' }
-        ],
-        credentials: [
-            { credentials: SchemaType.STRING},
-            { credentials: 'same-origin'}
-        ],
-        Host: [
-            { Host: SchemaType.STRING },
-            { Host: 'https://www.secure.com' },
-            { Host: 'http://www.unsecure.com' }
-        ]
-    }
 
     /*** @todo test */
     constructor(base_url='', parameters=null){
@@ -62,31 +64,30 @@ class Fetcher {
      */
         this.base_url = base_url
         this.parameters = parameters
-        Object.freeze(Fetcher.headers)
     }
 
     /*** @todo test */
-    #parseURLParameters(parameters2){
+    #parseURLParameters(additionalParameters){
     /**
      * @static @method
-     * @param { Object } parameters - an object containing key-value pairs to be used as query parameters in a request
+     * @param { Object } additionalParameters - an object containing key-value pairs to be used as query parameters in a request
      * @returns - a string of properly formatted query parameters for appending to the URL
      */
-        const mergedParameters = {... this.parameters, ...parameters2}
+        const mergedParameters = {... this.parameters, ...additionalParameters}
         const queryStr = Object.entries(mergedParameters).map(([key, value]) => `${key}=${value}`).join('&')
         return `?${queryStr}`
     }
 
     /*** @todo test */
-    #constructURL(base_url, endpoint, parameters2){
+    #constructURL(base_url, endpoint, additionalParameters){
     /**
      * @static @method
      * @param { string } base_url
      * @param { string } endpoint - the endpoint to be appended to the base_url
-     * @param { object } parameters - an object containing key-value pairs to be used in this specific request
+     * @param { object } additionalParameters - an object containing key-value pairs to be used in this specific request
      */
         let url = base_url + endpoint
-        if(parameters2){ url += this.#parseURLParameters(parameters2) }
+        if(additionalParameters){ url += this.#parseURLParameters(additionalParameters) }
         return url
     }
 
