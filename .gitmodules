@@ -4,3 +4,6 @@
 [submodule "module/jsutils"]
 	path = module/jsutils
 	url = https://github.com/jauntyjocularjay/jsutils.git
+[submodule "module/schemajs"]
+	path = module/schemajs
+	url = https://github.com/jauntyjocularjay/schemajs.git
