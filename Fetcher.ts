@@ -276,6 +276,5 @@ export {
     Fetcher,
     Method,
     Headers,
-    Options,
-    SchemaType
+    Options
 }
