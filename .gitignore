@@ -1,8 +1,8 @@
 .vscode/
-mockoon/
 node_modules/
 chaitests/
 git/
 
 
 secret.mjs
+secret.ts

@@ -11,8 +11,8 @@
         "test": "test"
     },
     "devDependencies": {
-        "chai": "^5.1.1",
-        "mocha": "^10.4.0"
+        "chai": "^5.3.3",
+        "mocha": "^10.8.2"
     },
     "scripts": {
         "test": "mocha test --exit",

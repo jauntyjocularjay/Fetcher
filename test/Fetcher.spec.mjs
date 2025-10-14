@@ -166,10 +166,14 @@ async function deleteTests(){
 
 }
 
-schemaTypeTests()
-constructorTests()
-await getTests()
-await putTests()
-await patchTests()
-await postTests()
-await deleteTests()
+describe('Fetcher.spec.mjs tests', async () => {
+    schemaTypeTests()
+    constructorTests()
+    await getTests()
+    await putTests()
+    await patchTests()
+    await postTests()
+    await deleteTests()
+})
+
+
