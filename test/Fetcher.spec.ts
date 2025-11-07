@@ -1,7 +1,7 @@
 import { expect } from 'chai'
-import ENV from '../secret.ts'
-import F from '../Fetcher.ts'
-import SchemaType from '../SchemaType.ts'
+import ENV from '../secret.js'
+import F from '../Fetcher.js'
+import SchemaType from '../SchemaType.js'
 
 
 
@@ -45,7 +45,9 @@ const failvalue = { type: 'unicorn' }
 function schemaTypeTests() {
     describe('SchemaType.matches() value verification and is failable', () => {
         types.forEach((type) => {
-            expect(SchemaType.valid(type)).to.be.true
+            it(`${type} is a valid SchemaType`, () => {
+                expect(SchemaType.valid(type)).to.be.true
+            })
         })
     })
 
@@ -165,7 +167,7 @@ async function getTests() {
 
 schemaTypeTests()
 constructorTests()
-await getTests()
+// await getTests()
 // await putTests()
 // await patchTests()
 // await postTests()

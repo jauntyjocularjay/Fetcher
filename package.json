@@ -1,7 +1,4 @@
 {
-    "dependencies": {
-        "stripe": "^15.11.0"
-    },
     "name": "fetcher",
     "description": "An ES6, fetch library to ease the use of JSON APIs",
     "version": "0.1.0",
@@ -12,12 +9,15 @@
     },
     "devDependencies": {
         "@types/chai": "^5.2.3",
+        "@types/mocha": "^10.0.10",
         "chai": "^5.3.3",
-        "mocha": "^10.8.2"
+        "mocha": "^10.8.2",
+        "ts-node": "^10.9.2",
+        "tsx": "^4.20.6"
     },
     "scripts": {
-        "test": "mocha test --exit",
-        "dev": ""
+        "test": "tsx test/Fetcher.spec.ts",
+        "dev": "npm i && npm audit fix && npm test"
     },
     "repository": {
         "type": "git",

@@ -1,4 +1,4 @@
-import ENV from './secret.ts'
+import ENV from './secret'
 
 type Header = {
     Accept: string
@@ -173,12 +173,20 @@ async function fetchRequest(request: Partial<Request>) {
     const { method, endpoint, body, headers } = request
     let payload: string | null = body ? JSON.stringify(body) : null
     const url = ENV.API.base_url + endpoint
+    let response: Response
 
-    return await fetch(url, {
-        method: method,
-        headers: headers,
-        body: payload,
-    })
+    try {
+        response = await fetch(url, {
+            method: method,
+            headers: headers,
+            body: payload,
+        })
+        if(!response.ok) {
+            throw new Error(`HTTP Error status: ${response.status}`)
+        }
+    } catch (error) {throw error}
+
+    return await response.json()
 }
 
 async function get(request: Partial<Request>) {
